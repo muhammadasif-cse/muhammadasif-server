@@ -43,10 +43,12 @@ const getAllNavigation = async (
   }
   const whereConditions = andConditions.length > 0 ? {$and: andConditions} : {};
   const result = await Navigation.find(whereConditions)
-    .populate("navigation")
+    .populate("submenu")
+    .populate("social")
     .sort(sortConditions)
     .skip(skip)
-    .limit(limit);
+    .limit(limit)
+    .lean();
   const total = await Navigation.countDocuments();
   return {
     meta: {
@@ -59,12 +61,12 @@ const getAllNavigation = async (
 };
 
 const getSingleNavigation = async (id: string): Promise<INavigation | null> => {
-  const result = await Navigation.findById({_id: id}).populate("navigation");
+  const result = await Navigation.findById({_id: id}).populate("submenu").populate("social").lean();
   return result;
 };
 
 const createNavigation = async (payload: INavigation): Promise<INavigation> => {
-  const result = (await Navigation.create(payload)).populate("navigation");
+  const result = (await (await Navigation.create(payload)).populate("submenu")).populate("social");
   return result;
 };
 const updateNavigation = async (
@@ -73,7 +75,9 @@ const updateNavigation = async (
 ): Promise<INavigation | null> => {
   const result = await Navigation.findOneAndUpdate({_id: id}, payload, {
     new: true,
-  });
+  })
+    .populate("submenu")
+    .populate("social");
   return result;
 };
 const deleteNavigation = async (id: string): Promise<INavigation | null> => {

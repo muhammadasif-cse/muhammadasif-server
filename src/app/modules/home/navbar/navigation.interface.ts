@@ -1,12 +1,12 @@
-import {Model} from "mongoose";
+import {Model, Types} from "mongoose";
 import {ISocial} from "../social/social.interface";
 import {ISubmenu} from "../submenu/submenu.interface";
 
 export interface INavigation {
   name: string;
   url: string;
-  submenu: ISubmenu[];
-  social: ISocial[];
+  submenu: Types.ObjectId | ISubmenu;
+  social: Types.ObjectId | ISocial;
 }
 
 export type NavigationModel = Model<INavigation, Record<string, unknown>>;
