@@ -1,11 +1,13 @@
-import express from 'express'
-import { AcademicDepartmentRoutes } from '../modules/academicDepartment/academicDepartment.route'
-const router = express.Router()
+import express from "express";
+import {NavigationRoutes} from "../modules/home/navbar/navigation.route";
+import {SubmenuRoutes} from "../modules/home/submenu/submenu.route";
+const router = express.Router();
 
 const moduleRoutes = [
-  { path: '/academic-department', route: AcademicDepartmentRoutes },
-]
+  {path: "/navigation", route: NavigationRoutes},
+  {path: "/submenu", route: SubmenuRoutes},
+];
 
-moduleRoutes.forEach(({ path, route }) => router.use(path, route))
+moduleRoutes.forEach(({path, route}) => router.use(path, route));
 
-export default router
+export default router;
