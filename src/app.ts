@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true })) //accept data url or json
 app.use('/api/v1', routes)
 app.get('/', (req: Request, res: Response) => {
   res.send(
-    `<h1 style="color:#242B2E;font-size:62px; text-align:center;margin-top:200px">Welcome to server</h1>`,
+    `<h1 style="color:#242B2E;font-size:62px; text-align:center;margin-top:200px">Server Running...🏃</h1>`,
   )
 })
 app.use(globalErrorHandler)
