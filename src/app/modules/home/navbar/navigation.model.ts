@@ -16,12 +16,7 @@ const NavigationSchema = new Schema<INavigation, NavigationModel>(
     submenu: {
       type: Schema.Types.ObjectId,
       ref: "Submenu",
-      required: true,
-    },
-    social: {
-      type: Schema.Types.ObjectId,
-      ref: "Social",
-      required: true,
+      required: false,
     },
   },
   {
