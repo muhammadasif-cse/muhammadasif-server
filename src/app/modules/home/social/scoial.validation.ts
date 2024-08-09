@@ -8,6 +8,9 @@ const createSocialZodSchema = z.object({
     url: z.string({
       required_error: "Social url is required",
     }),
+    icon: z.string({
+      required_error: "Social icon is required",
+    }),
   }),
 });
 const updateSocialZodSchema = z.object({
@@ -20,6 +23,11 @@ const updateSocialZodSchema = z.object({
     url: z
       .string({
         required_error: "Social url is required",
+      })
+      .optional(),
+    icon: z
+      .string({
+        required_error: "Social icon is required",
       })
       .optional(),
   }),
