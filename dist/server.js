@@ -16,28 +16,33 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const app_1 = __importDefault(require("./app"));
 const index_1 = __importDefault(require("./config/index"));
 const logger_1 = require("./shared/logger");
-process.on('uncaughtException', error => {
-    logger_1.errorlogger.error(error);
+process.on("uncaughtException", (error) => {
+    logger_1.errorlogger.error("Uncaught Exception:", error);
     process.exit(1);
 });
 let server;
-//database connection
+// Database connection
 function bootstrap() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             yield mongoose_1.default.connect(`${index_1.default.database_url}`);
-            logger_1.logger.info(`🛢 Database connection successful`);
-            app_1.default.listen(index_1.default.port, () => {
+            logger_1.logger.info("🛢 Database connection successful");
+            server = app_1.default.listen(index_1.default.port, () => {
                 logger_1.logger.info(`Application listening on port http://localhost:${index_1.default.port}`);
+            });
+            server.on("error", (err) => {
+                logger_1.errorlogger.error("Server error:", err);
+                process.exit(1);
             });
         }
         catch (err) {
-            logger_1.errorlogger.error(`Failed to connect database`, err);
+            logger_1.errorlogger.error("Failed to connect to the database:", err);
+            process.exit(1);
         }
-        process.on('unhandledRejection', error => {
+        process.on("unhandledRejection", (error) => {
+            logger_1.errorlogger.error("Unhandled Rejection:", error);
             if (server) {
                 server.close(() => {
-                    logger_1.errorlogger.error(error);
                     process.exit(1);
                 });
             }
@@ -48,9 +53,11 @@ function bootstrap() {
     });
 }
 bootstrap();
-process.on('SIGTERM', () => {
-    logger_1.logger.info('SIGTERM is received');
+process.on("SIGTERM", () => {
+    logger_1.logger.info("SIGTERM is received");
     if (server) {
-        server.close();
+        server.close(() => {
+            logger_1.logger.info("Server closed");
+        });
     }
 });
