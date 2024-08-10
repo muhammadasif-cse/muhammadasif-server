@@ -16,6 +16,7 @@ async function bootstrap() {
   try {
     await mongoose.connect(`${config.database_url}`);
     console.info("🛢 Database connection successful");
+
     server = app.listen(config.port, () => {
       console.info(`Application listening on port http://localhost:${config.port}`);
     });
@@ -48,6 +49,9 @@ process.on("SIGTERM", () => {
   if (server) {
     server.close(() => {
       console.info("Server closed");
+      process.exit(0);
     });
+  } else {
+    process.exit(0);
   }
 });
