@@ -1,21 +1,21 @@
 import {Schema, model} from "mongoose";
-import {IExperience, ExperienceModel} from "./experience.interface";
+import {IContact, ContactModel} from "./contact.interface";
 
-const ExperienceSchema = new Schema<IExperience, ExperienceModel>(
+const ContactSchema = new Schema<IContact, ContactModel>(
   {
-    title: {
+    name: {
       type: String,
       required: true,
     },
-    img: {
+    email: {
       type: String,
       required: true,
     },
-    date: {
+    number: {
       type: String,
       required: true,
     },
-    details: {
+    message: {
       type: String,
       required: true,
     },
@@ -28,4 +28,4 @@ const ExperienceSchema = new Schema<IExperience, ExperienceModel>(
   },
 );
 
-export const Experience = model<IExperience, ExperienceModel>("Experience", ExperienceSchema);
+export const Contact = model<IContact, ContactModel>("Contact", ContactSchema);
