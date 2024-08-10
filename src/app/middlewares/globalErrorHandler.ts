@@ -11,6 +11,7 @@ import config from "../../config";
 import ApiError from "../../errors/ApiError";
 import handleValidationError from "../../errors/handleValidationError";
 import handleZodError from "../../errors/handleZodError";
+import {errorlogger} from "../../shared/logger";
 import {IGenericErrorMessage} from "../interfaces/error";
 import handleCastError from "../../errors/handleCastError";
 
@@ -22,7 +23,7 @@ const globalErrorHandler: ErrorRequestHandler = (
 ) => {
   config.env === "development"
     ? console.log(`🐱‍🏍 globalErrorHandler ~~`, error)
-    : console.error(`🐱‍🏍 globalErrorHandler ~~`, error);
+    : errorlogger.error(`🐱‍🏍 globalErrorHandler ~~`, error);
 
   let statusCode = 500;
   let message = "Something went wrong !";
