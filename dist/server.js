@@ -15,8 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const app_1 = __importDefault(require("./app"));
 const index_1 = __importDefault(require("./config/index"));
+const logger_1 = require("./shared/logger");
 process.on("uncaughtException", (error) => {
-    console.error("Uncaught Exception:", error);
+    logger_1.errorlogger.error("Uncaught Exception:", error);
     process.exit(1);
 });
 let server;
@@ -25,21 +26,21 @@ function bootstrap() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             yield mongoose_1.default.connect(`${index_1.default.database_url}`);
-            console.info("🛢 Database connection successful");
+            logger_1.logger.info("🛢 Database connection successful");
             server = app_1.default.listen(index_1.default.port, () => {
-                console.info(`Application listening on port http://localhost:${index_1.default.port}`);
+                logger_1.logger.info(`Application listening on port http://localhost:${index_1.default.port}`);
             });
             server.on("error", (err) => {
-                console.error("Server error:", err);
+                logger_1.errorlogger.error("Server error:", err);
                 process.exit(1);
             });
         }
         catch (err) {
-            console.error("Failed to connect to the database:", err);
+            logger_1.errorlogger.error("Failed to connect to the database:", err);
             process.exit(1);
         }
         process.on("unhandledRejection", (error) => {
-            console.error("Unhandled Rejection:", error);
+            logger_1.errorlogger.error("Unhandled Rejection:", error);
             if (server) {
                 server.close(() => {
                     process.exit(1);
@@ -53,10 +54,10 @@ function bootstrap() {
 }
 bootstrap();
 process.on("SIGTERM", () => {
-    console.info("SIGTERM is received");
+    logger_1.logger.info("SIGTERM is received");
     if (server) {
         server.close(() => {
-            console.info("Server closed");
+            logger_1.logger.info("Server closed");
             process.exit(0);
         });
     }
