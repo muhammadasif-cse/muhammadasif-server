@@ -2,6 +2,9 @@ import {z} from "zod";
 
 const createSubmenuZodSchema = z.object({
   body: z.object({
+    menu: z.string({
+      required_error: "Submenu menu is required",
+    }),
     name: z.string({
       required_error: "Submenu name is required",
     }),
@@ -12,6 +15,11 @@ const createSubmenuZodSchema = z.object({
 });
 const updateSubmenuZodSchema = z.object({
   body: z.object({
+    menu: z
+      .string({
+        required_error: "Submenu menu is required",
+      })
+      .optional(),
     name: z
       .string({
         required_error: "Submenu name is required",

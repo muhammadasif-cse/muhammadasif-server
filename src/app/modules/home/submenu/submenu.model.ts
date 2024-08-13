@@ -3,6 +3,11 @@ import {ISubmenu, SubmenuModel} from "./submenu.interface";
 
 const SubmenuSchema = new Schema<ISubmenu, SubmenuModel>(
   {
+    menu: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     name: {
       type: String,
       required: true,
