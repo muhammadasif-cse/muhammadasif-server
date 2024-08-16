@@ -3,6 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Submenu = void 0;
 const mongoose_1 = require("mongoose");
 const SubmenuSchema = new mongoose_1.Schema({
+    menu: {
+        type: String,
+        required: true,
+    },
     name: {
         type: String,
         required: true,

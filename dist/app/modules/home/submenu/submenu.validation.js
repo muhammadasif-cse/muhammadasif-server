@@ -4,6 +4,9 @@ exports.SubmenuValidation = void 0;
 const zod_1 = require("zod");
 const createSubmenuZodSchema = zod_1.z.object({
     body: zod_1.z.object({
+        menu: zod_1.z.string({
+            required_error: "Submenu menu is required",
+        }),
         name: zod_1.z.string({
             required_error: "Submenu name is required",
         }),
@@ -14,6 +17,11 @@ const createSubmenuZodSchema = zod_1.z.object({
 });
 const updateSubmenuZodSchema = zod_1.z.object({
     body: zod_1.z.object({
+        menu: zod_1.z
+            .string({
+            required_error: "Submenu menu is required",
+        })
+            .optional(),
         name: zod_1.z
             .string({
             required_error: "Submenu name is required",
