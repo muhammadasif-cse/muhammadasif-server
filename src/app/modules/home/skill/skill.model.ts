@@ -8,7 +8,7 @@ const SkillSchema = new Schema<ISkill, SkillModel>(
       required: true,
       unique: true,
     },
-    img: {
+    icon: {
       type: String,
       required: true,
       unique: true,

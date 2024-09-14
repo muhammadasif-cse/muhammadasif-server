@@ -17,7 +17,7 @@ const apiLimiter = rateLimit({
     @@ max request testing for 3 requests per windowMs
   */
   windowMs: 30 * 1000,
-  max: 5,
+  max: 100,
   message: {
     statusCode: httpStatus.TOO_MANY_REQUESTS,
     success: false,

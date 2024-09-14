@@ -11,7 +11,6 @@ const TestimonialSchema = new Schema<ITestimonial, TestimonialModel>(
     img: {
       type: String,
       required: true,
-      unique: true,
     },
     review: {
       type: String,
@@ -21,7 +20,6 @@ const TestimonialSchema = new Schema<ITestimonial, TestimonialModel>(
     position: {
       type: String,
       required: true,
-      unique: true,
     },
   },
   {

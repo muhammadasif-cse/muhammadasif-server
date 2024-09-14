@@ -2,9 +2,10 @@ import {Model} from "mongoose";
 
 export interface IExperience {
   title: string;
-  img: string;
+  icon: string;
   date: string;
   details: string;
+  url: string;
 }
 
 export type ExperienceModel = Model<IExperience, Record<string, unknown>>;

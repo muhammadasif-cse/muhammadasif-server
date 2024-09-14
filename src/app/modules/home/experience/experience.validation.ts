@@ -5,14 +5,17 @@ const createExperienceZodSchema = z.object({
     title: z.string({
       required_error: "Experience name is required",
     }),
-    img: z.string({
-      required_error: "Experience img is required",
+    icon: z.string({
+      required_error: "Experience icon is required",
     }),
     date: z.string({
       required_error: "Experience date is required",
     }),
     details: z.string({
       required_error: "Experience details is required",
+    }),
+    url: z.string({
+      required_error: "Experience company url is required",
     }),
   }),
 });
@@ -23,9 +26,9 @@ const updateExperienceZodSchema = z.object({
         required_error: "Experience name is required",
       })
       .optional(),
-    img: z
+    icon: z
       .string({
-        required_error: "Experience img is required",
+        required_error: "Experience icon is required",
       })
       .optional(),
     date: z
@@ -36,6 +39,11 @@ const updateExperienceZodSchema = z.object({
     details: z
       .string({
         required_error: "Experience details is required",
+      })
+      .optional(),
+    url: z
+      .string({
+        required_error: "Experience company url is required",
       })
       .optional(),
   }),

@@ -2,7 +2,7 @@ import {Model} from "mongoose";
 
 export interface ISkill {
   name: string;
-  img: string;
+  icon: string;
 }
 
 export type SkillModel = Model<ISkill, Record<string, unknown>>;

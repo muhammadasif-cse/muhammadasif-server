@@ -7,7 +7,7 @@ const ExperienceSchema = new Schema<IExperience, ExperienceModel>(
       type: String,
       required: true,
     },
-    img: {
+    icon: {
       type: String,
       required: true,
     },
@@ -16,6 +16,10 @@ const ExperienceSchema = new Schema<IExperience, ExperienceModel>(
       required: true,
     },
     details: {
+      type: String,
+      required: true,
+    },
+    url: {
       type: String,
       required: true,
     },
