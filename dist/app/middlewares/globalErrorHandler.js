@@ -51,6 +51,28 @@ const globalErrorHandler = (error, req, res, next) => {
         message = simplifiedError.message;
         errorMessages = simplifiedError.errorMessages;
     }
+    else if (error.error) {
+        statusCode = error.error.http_code;
+        message = error.error.message;
+        res.status(statusCode).json({
+            success: false,
+            statusCode: statusCode,
+            message,
+            data: null,
+            stack: config_1.default.env !== "production" ? error === null || error === void 0 ? void 0 : error.stack : undefined,
+        });
+    }
+    else if (error) {
+        statusCode = error.http_code;
+        message = error.message;
+        res.status(statusCode).json({
+            success: false,
+            statusCode: statusCode,
+            message,
+            data: null,
+            stack: config_1.default.env !== "production" ? error === null || error === void 0 ? void 0 : error.stack : undefined,
+        });
+    }
     else if (error instanceof mongoose_1.Error) {
         message = error === null || error === void 0 ? void 0 : error.message;
         errorMessages = (error === null || error === void 0 ? void 0 : error.message)

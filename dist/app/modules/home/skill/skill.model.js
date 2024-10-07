@@ -8,7 +8,7 @@ const SkillSchema = new mongoose_1.Schema({
         required: true,
         unique: true,
     },
-    img: {
+    icon: {
         type: String,
         required: true,
         unique: true,

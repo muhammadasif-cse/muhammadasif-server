@@ -7,7 +7,7 @@ const ExperienceSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
-    img: {
+    icon: {
         type: String,
         required: true,
     },
@@ -16,6 +16,10 @@ const ExperienceSchema = new mongoose_1.Schema({
         required: true,
     },
     details: {
+        type: String,
+        required: true,
+    },
+    url: {
         type: String,
         required: true,
     },

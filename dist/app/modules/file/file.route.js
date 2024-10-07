@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fileUploadRoutes = void 0;
+exports.FileUploadRoutes = void 0;
 const express_1 = __importDefault(require("express"));
 const file_controller_1 = require("./file.controller");
 const multer_1 = __importStar(require("../../../config/multer"));
@@ -35,4 +35,4 @@ router.post("/upload", multer_1.default.single("file"), multer_1.errorHandler, f
 router.delete("/remove/:filename", file_controller_1.fileController.requestDeleteFile);
 router.get("/access/:filename/:code", file_controller_1.fileController.requestGetFileByCode);
 router.get("/all", file_controller_1.fileController.requestGetAllFiles);
-exports.fileUploadRoutes = router;
+exports.FileUploadRoutes = router;

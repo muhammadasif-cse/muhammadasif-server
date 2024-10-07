@@ -9,8 +9,12 @@ const http_status_1 = __importDefault(require("http-status"));
 const globalErrorHandler_1 = __importDefault(require("./app/middlewares/globalErrorHandler"));
 const routes_1 = __importDefault(require("./app/routes"));
 const secureAPI_1 = require("./app/middlewares/secureAPI");
+const body_parser_1 = __importDefault(require("body-parser"));
 //? call express
 const app = (0, express_1.default)();
+//? body parser
+app.use(body_parser_1.default.json({ limit: "5mb" }));
+app.use(body_parser_1.default.urlencoded({ limit: "5mb", extended: true }));
 // for multer file upload
 app.use(express_1.default.static("uploads"));
 app.set("trust proxy", 1);

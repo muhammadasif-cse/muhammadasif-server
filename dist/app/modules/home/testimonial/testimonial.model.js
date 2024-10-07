@@ -11,7 +11,6 @@ const TestimonialSchema = new mongoose_1.Schema({
     img: {
         type: String,
         required: true,
-        unique: true,
     },
     review: {
         type: String,
@@ -21,7 +20,6 @@ const TestimonialSchema = new mongoose_1.Schema({
     position: {
         type: String,
         required: true,
-        unique: true,
     },
 }, {
     timestamps: true,

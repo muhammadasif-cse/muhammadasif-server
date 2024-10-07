@@ -7,8 +7,8 @@ const createSkillZodSchema = zod_1.z.object({
         name: zod_1.z.string({
             required_error: "Skill name is required",
         }),
-        img: zod_1.z.string({
-            required_error: "Skill img is required",
+        icon: zod_1.z.string({
+            required_error: "Skill icon is required",
         }),
     }),
 });
@@ -19,7 +19,7 @@ const updateSkillZodSchema = zod_1.z.object({
             required_error: "Skill name is required",
         })
             .optional(),
-        img: zod_1.z
+        icon: zod_1.z
             .string({
             required_error: "Skill icon is required",
         })

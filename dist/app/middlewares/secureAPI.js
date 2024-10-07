@@ -19,7 +19,7 @@ const apiLimiter = (0, express_rate_limit_1.default)({
       @@ max request testing for 3 requests per windowMs
     */
     windowMs: 30 * 1000,
-    max: 5,
+    max: 100,
     message: {
         statusCode: http_status_1.default.TOO_MANY_REQUESTS,
         success: false,
