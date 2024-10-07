@@ -54,6 +54,26 @@ const globalErrorHandler: ErrorRequestHandler = (
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
     errorMessages = simplifiedError.errorMessages;
+  } else if (error.error) {
+    statusCode = error.error.http_code;
+    message = error.error.message;
+    res.status(statusCode).json({
+      success: false,
+      statusCode: statusCode,
+      message,
+      data: null,
+      stack: config.env !== "production" ? error?.stack : undefined,
+    });
+  } else if (error) {
+    statusCode = error.http_code;
+    message = error.message;
+    res.status(statusCode).json({
+      success: false,
+      statusCode: statusCode,
+      message,
+      data: null,
+      stack: config.env !== "production" ? error?.stack : undefined,
+    });
   } else if (error instanceof Error) {
     message = error?.message;
     errorMessages = error?.message

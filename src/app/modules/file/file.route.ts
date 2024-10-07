@@ -8,4 +8,4 @@ router.delete("/remove/:filename", fileController.requestDeleteFile);
 router.get("/access/:filename/:code", fileController.requestGetFileByCode);
 router.get("/all", fileController.requestGetAllFiles);
 
-export const fileUploadRoutes = router;
+export const FileUploadRoutes = router;

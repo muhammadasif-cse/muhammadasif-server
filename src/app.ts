@@ -4,9 +4,14 @@ import httpStatus from "http-status";
 import globalErrorHandler from "./app/middlewares/globalErrorHandler";
 import routes from "./app/routes";
 import {apiLimiter, apiSecretToken} from "./app/middlewares/secureAPI";
+import bodyParser from "body-parser";
 
 //? call express
 const app: Application = express();
+
+//? body parser
+app.use(bodyParser.json({limit: "5mb"}));
+app.use(bodyParser.urlencoded({limit: "5mb", extended: true}));
 
 // for multer file upload
 app.use(express.static("uploads"));
