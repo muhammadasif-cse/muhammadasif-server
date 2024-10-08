@@ -2,9 +2,11 @@ import {Request, Response} from "express";
 import httpStatus from "http-status";
 import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../../shared/sendResponse";
-import {ICloudinary, ICloudinaryResponse} from "./cloudinary.interface";
+import {ICloudinary} from "./cloudinary.interface";
 import {CloudinaryService} from "./cloudinary.service";
-import {REQUEST_MESSAGES} from "./cloudinary.constant";
+import {cloudinaryFilterableFields, REQUEST_MESSAGES} from "./cloudinary.constant";
+import {paginationFields} from "../../../constants/pagination";
+import pick from "../../../shared/pick";
 
 const createCloudinary = catchAsync(async (req: Request, res: Response) => {
   const {...cloudinary} = req.body;
@@ -17,7 +19,7 @@ const createCloudinary = catchAsync(async (req: Request, res: Response) => {
     });
   }
 
-  const result = await CloudinaryService.createCloudinary({url: cloudinary.file});
+  const result = await CloudinaryService.createCloudinary({file: cloudinary.file});
 
   // Send response
   sendResponse<ICloudinary>(res, {
@@ -29,13 +31,17 @@ const createCloudinary = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllCloudinary = catchAsync(async (req: Request, res: Response) => {
-  const result = await CloudinaryService.getAllCloudinary();
+  const filters = pick(req.query, cloudinaryFilterableFields);
+  const paginationOptions = pick(req.query, paginationFields);
+
+  const result = await CloudinaryService.getAllCloudinary(filters, paginationOptions);
   //  send response
-  sendResponse<ICloudinaryResponse[]>(res, {
+  sendResponse<ICloudinary[]>(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: REQUEST_MESSAGES.GET,
-    data: result,
+    meta: result.meta,
+    data: result.data,
   });
 });
 
@@ -50,17 +56,30 @@ const getSingleCloudinary = catchAsync(async (req: Request, res: Response) => {
     });
   }
   // send response
-  sendResponse<ICloudinaryResponse>(res, {
+  sendResponse<ICloudinary>(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: REQUEST_MESSAGES.GET,
     data: result,
   });
 });
-
-const deleteCloudinary = catchAsync(async (req: Request, res: Response) => {
+const updateCloudinary = catchAsync(async (req: Request, res: Response) => {
   const {id} = req.params;
-  const result = await CloudinaryService.deleteCloudinary(id);
+  const updates = req.body;
+
+  const result = await CloudinaryService.updateCloudinary(id, updates);
+
+  sendResponse<ICloudinary>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: REQUEST_MESSAGES.UPDATE,
+    data: result,
+  });
+});
+const deleteCloudinary = catchAsync(async (req: Request, res: Response) => {
+  const {id, public_id} = req.body;
+  const payload = {id, public_id};
+  const result = await CloudinaryService.deleteCloudinary(payload);
   if ((result as unknown as {result: string}).result === "not found") {
     return sendResponse(res, {
       statusCode: httpStatus.NOT_FOUND,
@@ -81,5 +100,6 @@ export const CloudinaryController = {
   createCloudinary,
   getAllCloudinary,
   getSingleCloudinary,
+  updateCloudinary,
   deleteCloudinary,
 };

@@ -1,23 +1,19 @@
 import {Model} from "mongoose";
 
 export interface ICloudinary {
-  url: string;
-  public_id?: string;
-}
-export interface ICloudinaryResponse {
-  asset_id: string;
+  asset_id?: string;
   public_id: string;
-  format: string;
-  version: number;
-  resource_type: string;
-  type: string;
-  created_at: string;
-  bytes: number;
-  width: number;
-  height: number;
-  folder: string;
+  format?: string;
+  version?: number;
+  resource_type?: string;
+  type?: string;
+  created_at?: string;
+  bytes?: number;
+  width?: number;
+  height?: number;
+  folder?: string;
   url: string;
-  secure_url: string;
+  secure_url?: string;
 }
 
 export type CloudinaryModel = Model<ICloudinary, Record<string, unknown>>;
