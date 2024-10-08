@@ -131,7 +131,7 @@ const deleteCloudinary = async (payload: {
 }): Promise<ICloudinary | null> => {
   const cloudinaryDelete = await cloudinary.uploader.destroy(payload.public_id);
   if (cloudinaryDelete.result !== "ok") {
-    throw new Error("This asset not found");
+    throw new Error("This image is not found in the cloudinary");
   } else {
     const result = await Cloudinary.findByIdAndDelete({_id: payload.id});
     if (!result) {

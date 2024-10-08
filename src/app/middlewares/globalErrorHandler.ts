@@ -65,7 +65,8 @@ const globalErrorHandler: ErrorRequestHandler = (
       stack: config.env !== "production" ? error?.stack : undefined,
     });
   } else if (error) {
-    statusCode = error.http_code;
+    const validStatusCode = statusCode && !isNaN(statusCode) ? statusCode : 400;
+    statusCode = validStatusCode;
     message = error.message;
     res.status(statusCode).json({
       success: false,
@@ -75,22 +76,24 @@ const globalErrorHandler: ErrorRequestHandler = (
       stack: config.env !== "production" ? error?.stack : undefined,
     });
   } else if (error instanceof Error) {
-    message = error?.message;
-    errorMessages = error?.message
+    message = error.message;
+    errorMessages = error.message
       ? [
           {
             path: "",
-            message: error?.message,
+            message: error.message,
           },
         ]
       : [];
   }
 
-  res.status(statusCode).json({
+  const validStatusCode = statusCode && !isNaN(statusCode) ? statusCode : 400;
+
+  res.status(validStatusCode).json({
     success: false,
     message,
     errorMessages,
-    stack: config.env !== "production" ? error?.stack : undefined,
+    stack: config.env !== "production" ? error.stack : undefined,
   });
 };
 
