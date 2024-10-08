@@ -63,7 +63,7 @@ const getSingleCloudinary = async (id: string): Promise<ICloudinary | null> => {
 };
 const createCloudinary = async (payload: {file: string}): Promise<ICloudinary> => {
   if (!payload.file) {
-    throw new Error("file is required to update Cloudinary asset");
+    throw new Error("File is required to upload this");
   }
   const isBase64 = payload.file.startsWith("data:image/");
   const imageUrl = isBase64 ? payload.file : `data:image/webp;base64,${payload.file}`;
