@@ -42,7 +42,7 @@ const getAllExperience = async (
   }
   const whereConditions = andConditions.length > 0 ? {$and: andConditions} : {};
   const result = await Experience.find(whereConditions)
-    .sort(sortConditions)
+    .sort({...sortConditions, createdAt: 1})
     .skip(skip)
     .limit(limit);
   const total = await Experience.countDocuments();
