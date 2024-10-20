@@ -41,7 +41,10 @@ const getAllContact = async (
     sortConditions[sortBy] = sortOrder;
   }
   const whereConditions = andConditions.length > 0 ? {$and: andConditions} : {};
-  const result = await Contact.find(whereConditions).sort(sortConditions).skip(skip).limit(limit);
+  const result = await Contact.find(whereConditions)
+    .sort({...sortConditions, createdAt: -1})
+    .skip(skip)
+    .limit(limit);
   const total = await Contact.countDocuments();
   return {
     meta: {
