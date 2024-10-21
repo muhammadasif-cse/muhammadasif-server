@@ -51,7 +51,7 @@ const getAllExperience = (filters, paginationOptions) => __awaiter(void 0, void 
     }
     const whereConditions = andConditions.length > 0 ? { $and: andConditions } : {};
     const result = yield experience_model_1.Experience.find(whereConditions)
-        .sort(sortConditions)
+        .sort(Object.assign(Object.assign({}, sortConditions), { createdAt: 1 }))
         .skip(skip)
         .limit(limit);
     const total = yield experience_model_1.Experience.countDocuments();

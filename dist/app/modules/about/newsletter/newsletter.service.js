@@ -20,16 +20,16 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SkillService = void 0;
+exports.newsletterService = void 0;
 const paginationHelper_1 = require("../../../../helpers/paginationHelper");
-const skill_constant_1 = require("./skill.constant");
-const skill_model_1 = require("./skill.model");
-const getAllSkill = (filters, paginationOptions) => __awaiter(void 0, void 0, void 0, function* () {
+const newsletter_constant_1 = require("./newsletter.constant");
+const newsletter_model_1 = require("./newsletter.model");
+const getAllNewsletter = (filters, paginationOptions) => __awaiter(void 0, void 0, void 0, function* () {
     const { searchTerm } = filters, filtersData = __rest(filters, ["searchTerm"]);
     const andConditions = [];
     if (searchTerm) {
         andConditions.push({
-            $or: skill_constant_1.skillSearchableFields.map((field) => ({
+            $or: newsletter_constant_1.newsletterSearchableFields.map((field) => ({
                 [field]: {
                     $regex: searchTerm,
                     $options: "i",
@@ -50,11 +50,11 @@ const getAllSkill = (filters, paginationOptions) => __awaiter(void 0, void 0, vo
         sortConditions[sortBy] = sortOrder;
     }
     const whereConditions = andConditions.length > 0 ? { $and: andConditions } : {};
-    const result = yield skill_model_1.Skill.find(whereConditions)
+    const result = yield newsletter_model_1.Newsletter.find(whereConditions)
         .sort(Object.assign(Object.assign({}, sortConditions), { createdAt: 1 }))
         .skip(skip)
         .limit(limit);
-    const total = yield skill_model_1.Skill.countDocuments();
+    const total = yield newsletter_model_1.Newsletter.countDocuments();
     return {
         meta: {
             page,
@@ -64,28 +64,28 @@ const getAllSkill = (filters, paginationOptions) => __awaiter(void 0, void 0, vo
         data: result,
     };
 });
-const getSingleSkill = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield skill_model_1.Skill.findById({ _id: id }).lean();
+const getSingleNewsletter = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield newsletter_model_1.Newsletter.findById({ _id: id }).lean();
     return result;
 });
-const createSkill = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield skill_model_1.Skill.create(payload);
+const createNewsletter = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield newsletter_model_1.Newsletter.create(payload);
     return result;
 });
-const updateSkill = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield skill_model_1.Skill.findOneAndUpdate({ _id: id }, payload, {
+const updateNewsletter = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield newsletter_model_1.Newsletter.findOneAndUpdate({ _id: id }, payload, {
         new: true,
     });
     return result;
 });
-const deleteSkill = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield skill_model_1.Skill.findByIdAndDelete({ _id: id });
+const deleteNewsletter = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield newsletter_model_1.Newsletter.findByIdAndDelete({ _id: id });
     return result;
 });
-exports.SkillService = {
-    createSkill,
-    getAllSkill,
-    getSingleSkill,
-    updateSkill,
-    deleteSkill,
+exports.newsletterService = {
+    createNewsletter,
+    getAllNewsletter,
+    getSingleNewsletter,
+    updateNewsletter,
+    deleteNewsletter,
 };

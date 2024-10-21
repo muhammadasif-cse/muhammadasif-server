@@ -20,16 +20,16 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SkillService = void 0;
+exports.achievementService = void 0;
 const paginationHelper_1 = require("../../../../helpers/paginationHelper");
-const skill_constant_1 = require("./skill.constant");
-const skill_model_1 = require("./skill.model");
-const getAllSkill = (filters, paginationOptions) => __awaiter(void 0, void 0, void 0, function* () {
+const achievement_constant_1 = require("./achievement.constant");
+const achievement_model_1 = require("./achievement.model");
+const getAllAchievement = (filters, paginationOptions) => __awaiter(void 0, void 0, void 0, function* () {
     const { searchTerm } = filters, filtersData = __rest(filters, ["searchTerm"]);
     const andConditions = [];
     if (searchTerm) {
         andConditions.push({
-            $or: skill_constant_1.skillSearchableFields.map((field) => ({
+            $or: achievement_constant_1.achievementSearchableFields.map((field) => ({
                 [field]: {
                     $regex: searchTerm,
                     $options: "i",
@@ -50,11 +50,11 @@ const getAllSkill = (filters, paginationOptions) => __awaiter(void 0, void 0, vo
         sortConditions[sortBy] = sortOrder;
     }
     const whereConditions = andConditions.length > 0 ? { $and: andConditions } : {};
-    const result = yield skill_model_1.Skill.find(whereConditions)
+    const result = yield achievement_model_1.Achievement.find(whereConditions)
         .sort(Object.assign(Object.assign({}, sortConditions), { createdAt: 1 }))
         .skip(skip)
         .limit(limit);
-    const total = yield skill_model_1.Skill.countDocuments();
+    const total = yield achievement_model_1.Achievement.countDocuments();
     return {
         meta: {
             page,
@@ -64,28 +64,28 @@ const getAllSkill = (filters, paginationOptions) => __awaiter(void 0, void 0, vo
         data: result,
     };
 });
-const getSingleSkill = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield skill_model_1.Skill.findById({ _id: id }).lean();
+const getSingleAchievement = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield achievement_model_1.Achievement.findById({ _id: id }).lean();
     return result;
 });
-const createSkill = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield skill_model_1.Skill.create(payload);
+const createAchievement = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield achievement_model_1.Achievement.create(payload);
     return result;
 });
-const updateSkill = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield skill_model_1.Skill.findOneAndUpdate({ _id: id }, payload, {
+const updateAchievement = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield achievement_model_1.Achievement.findOneAndUpdate({ _id: id }, payload, {
         new: true,
     });
     return result;
 });
-const deleteSkill = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield skill_model_1.Skill.findByIdAndDelete({ _id: id });
+const deleteAchievement = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield achievement_model_1.Achievement.findByIdAndDelete({ _id: id });
     return result;
 });
-exports.SkillService = {
-    createSkill,
-    getAllSkill,
-    getSingleSkill,
-    updateSkill,
-    deleteSkill,
+exports.achievementService = {
+    createAchievement,
+    getAllAchievement,
+    getSingleAchievement,
+    updateAchievement,
+    deleteAchievement,
 };

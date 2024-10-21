@@ -9,6 +9,7 @@ const cloudinary_controller_1 = require("./cloudinary.controller");
 const router = express_1.default.Router();
 router.post("/create", cloudinary_controller_1.CloudinaryController.createCloudinary);
 router.get("/:id", cloudinary_controller_1.CloudinaryController.getSingleCloudinary);
-router.delete("/:id", cloudinary_controller_1.CloudinaryController.deleteCloudinary);
+router.delete("/", cloudinary_controller_1.CloudinaryController.deleteCloudinary);
+router.put("/:id", cloudinary_controller_1.CloudinaryController.updateCloudinary);
 router.get("/", cloudinary_controller_1.CloudinaryController.getAllCloudinary);
 exports.CloudinaryRoutes = router;

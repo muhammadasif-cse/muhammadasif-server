@@ -11,6 +11,9 @@ const testimonial_route_1 = require("../modules/home/testimonial/testimonial.rou
 const contact_route_1 = require("../modules/home/contact/contact.route");
 const cloudinary_route_1 = require("../modules/cloudinary/cloudinary.route");
 const file_route_1 = require("../modules/file/file.route");
+const me_route_1 = require("../modules/about/me/me.route");
+const achievement_route_1 = require("../modules/about/achievement/achievement.route");
+const newsletter_route_1 = require("../modules/about/newsletter/newsletter.route");
 const router = express_1.default.Router();
 const moduleRoutes = [
     { path: "/social", route: social_route_1.SocialRoutes },
@@ -20,6 +23,9 @@ const moduleRoutes = [
     { path: "/contact", route: contact_route_1.ContactRoutes },
     { path: "/file", route: file_route_1.FileUploadRoutes },
     { path: "/cloudinary", route: cloudinary_route_1.CloudinaryRoutes },
+    { path: "/about/me", route: me_route_1.AboutMeRoutes },
+    { path: "/about/achievement", route: achievement_route_1.AchievementRoutes },
+    { path: "/newsletter", route: newsletter_route_1.NewsletterRoutes },
 ];
 moduleRoutes.forEach(({ path, route }) => router.use(path, route));
 exports.default = router;

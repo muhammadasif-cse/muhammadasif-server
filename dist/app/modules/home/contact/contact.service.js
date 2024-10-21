@@ -50,7 +50,10 @@ const getAllContact = (filters, paginationOptions) => __awaiter(void 0, void 0, 
         sortConditions[sortBy] = sortOrder;
     }
     const whereConditions = andConditions.length > 0 ? { $and: andConditions } : {};
-    const result = yield contact_model_1.Contact.find(whereConditions).sort(sortConditions).skip(skip).limit(limit);
+    const result = yield contact_model_1.Contact.find(whereConditions)
+        .sort(Object.assign(Object.assign({}, sortConditions), { createdAt: -1 }))
+        .skip(skip)
+        .limit(limit);
     const total = yield contact_model_1.Contact.countDocuments();
     return {
         meta: {

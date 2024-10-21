@@ -20,16 +20,16 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SkillService = void 0;
+exports.aboutMeService = void 0;
 const paginationHelper_1 = require("../../../../helpers/paginationHelper");
-const skill_constant_1 = require("./skill.constant");
-const skill_model_1 = require("./skill.model");
-const getAllSkill = (filters, paginationOptions) => __awaiter(void 0, void 0, void 0, function* () {
+const me_constant_1 = require("./me.constant");
+const me_model_1 = require("./me.model");
+const getAllAboutMe = (filters, paginationOptions) => __awaiter(void 0, void 0, void 0, function* () {
     const { searchTerm } = filters, filtersData = __rest(filters, ["searchTerm"]);
     const andConditions = [];
     if (searchTerm) {
         andConditions.push({
-            $or: skill_constant_1.skillSearchableFields.map((field) => ({
+            $or: me_constant_1.aboutMeSearchableFields.map((field) => ({
                 [field]: {
                     $regex: searchTerm,
                     $options: "i",
@@ -50,11 +50,11 @@ const getAllSkill = (filters, paginationOptions) => __awaiter(void 0, void 0, vo
         sortConditions[sortBy] = sortOrder;
     }
     const whereConditions = andConditions.length > 0 ? { $and: andConditions } : {};
-    const result = yield skill_model_1.Skill.find(whereConditions)
+    const result = yield me_model_1.AboutMe.find(whereConditions)
         .sort(Object.assign(Object.assign({}, sortConditions), { createdAt: 1 }))
         .skip(skip)
         .limit(limit);
-    const total = yield skill_model_1.Skill.countDocuments();
+    const total = yield me_model_1.AboutMe.countDocuments();
     return {
         meta: {
             page,
@@ -64,28 +64,28 @@ const getAllSkill = (filters, paginationOptions) => __awaiter(void 0, void 0, vo
         data: result,
     };
 });
-const getSingleSkill = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield skill_model_1.Skill.findById({ _id: id }).lean();
+const getSingleAboutMe = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield me_model_1.AboutMe.findById({ _id: id }).lean();
     return result;
 });
-const createSkill = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield skill_model_1.Skill.create(payload);
+const createAboutMe = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield me_model_1.AboutMe.create(payload);
     return result;
 });
-const updateSkill = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield skill_model_1.Skill.findOneAndUpdate({ _id: id }, payload, {
+const updateAboutMe = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield me_model_1.AboutMe.findOneAndUpdate({ _id: id }, payload, {
         new: true,
     });
     return result;
 });
-const deleteSkill = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield skill_model_1.Skill.findByIdAndDelete({ _id: id });
+const deleteAboutMe = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield me_model_1.AboutMe.findByIdAndDelete({ _id: id });
     return result;
 });
-exports.SkillService = {
-    createSkill,
-    getAllSkill,
-    getSingleSkill,
-    updateSkill,
-    deleteSkill,
+exports.aboutMeService = {
+    createAboutMe,
+    getAllAboutMe,
+    getSingleAboutMe,
+    updateAboutMe,
+    deleteAboutMe,
 };

@@ -51,6 +51,14 @@ const globalErrorHandler = (error, req, res, next) => {
         message = simplifiedError.message;
         errorMessages = simplifiedError.errorMessages;
     }
+    else if (error.code === 11000) {
+        statusCode = 409;
+        message = "Duplicate key error";
+        errorMessages = Object.keys(error.keyValue).map((key) => ({
+            path: key,
+            message: `${key} already exists.`,
+        }));
+    }
     else if (error.error) {
         statusCode = error.error.http_code;
         message = error.error.message;
@@ -63,7 +71,8 @@ const globalErrorHandler = (error, req, res, next) => {
         });
     }
     else if (error) {
-        statusCode = error.http_code;
+        const validStatusCode = statusCode && !isNaN(statusCode) ? statusCode : 400;
+        statusCode = validStatusCode;
         message = error.message;
         res.status(statusCode).json({
             success: false,
@@ -74,21 +83,22 @@ const globalErrorHandler = (error, req, res, next) => {
         });
     }
     else if (error instanceof mongoose_1.Error) {
-        message = error === null || error === void 0 ? void 0 : error.message;
-        errorMessages = (error === null || error === void 0 ? void 0 : error.message)
+        message = error.message;
+        errorMessages = error.message
             ? [
                 {
                     path: "",
-                    message: error === null || error === void 0 ? void 0 : error.message,
+                    message: error.message,
                 },
             ]
             : [];
     }
-    res.status(statusCode).json({
+    const validStatusCode = statusCode && !isNaN(statusCode) ? statusCode : 400;
+    res.status(validStatusCode).json({
         success: false,
         message,
         errorMessages,
-        stack: config_1.default.env !== "production" ? error === null || error === void 0 ? void 0 : error.stack : undefined,
+        stack: config_1.default.env !== "production" ? error.stack : undefined,
     });
 };
 exports.default = globalErrorHandler;
