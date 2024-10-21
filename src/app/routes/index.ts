@@ -6,6 +6,7 @@ import {TestimonialRoutes} from "../modules/home/testimonial/testimonial.route";
 import {ContactRoutes} from "../modules/home/contact/contact.route";
 import {CloudinaryRoutes} from "../modules/cloudinary/cloudinary.route";
 import {FileUploadRoutes} from "../modules/file/file.route";
+import {AboutMeRoutes} from "../modules/about/me/me.route";
 const router = express.Router();
 
 const moduleRoutes = [
@@ -16,6 +17,8 @@ const moduleRoutes = [
   {path: "/contact", route: ContactRoutes},
   {path: "/file", route: FileUploadRoutes},
   {path: "/cloudinary", route: CloudinaryRoutes},
+  {path: "/about/me", route: AboutMeRoutes},
+  {path: "/about/achievement", route: AboutMeRoutes},
 ];
 
 moduleRoutes.forEach(({path, route}) => router.use(path, route));
