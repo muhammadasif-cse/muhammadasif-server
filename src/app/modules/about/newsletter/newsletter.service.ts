@@ -2,21 +2,21 @@ import {SortOrder} from "mongoose";
 import {paginationHelper} from "../../../../helpers/paginationHelper";
 import {IGenericResponse} from "../../../interfaces/common";
 import {IPaginationOptions} from "../../../interfaces/pagination";
-import {IAchievement, IAchievementFilters} from "./achievement.interface";
-import {achievementSearchableFields} from "./achievement.constant";
-import {Achievement} from "./achievement.model";
+import {INewsletter, INewsletterFilters} from "./newsletter.interface";
+import {newsletterSearchableFields} from "./newsletter.constant";
+import {Newsletter} from "./newsletter.model";
 
-const getAllAchievement = async (
-  filters: IAchievementFilters,
+const getAllNewsletter = async (
+  filters: INewsletterFilters,
   paginationOptions: IPaginationOptions,
-): Promise<IGenericResponse<IAchievement[]>> => {
+): Promise<IGenericResponse<INewsletter[]>> => {
   const {searchTerm, ...filtersData} = filters;
 
   const andConditions = [];
 
   if (searchTerm) {
     andConditions.push({
-      $or: achievementSearchableFields.map((field) => ({
+      $or: newsletterSearchableFields.map((field) => ({
         [field]: {
           $regex: searchTerm,
           $options: "i",
@@ -41,49 +41,47 @@ const getAllAchievement = async (
     sortConditions[sortBy] = sortOrder;
   }
   const whereConditions = andConditions.length > 0 ? {$and: andConditions} : {};
-  const result = await Achievement.find(whereConditions)
+  const result = await Newsletter.find(whereConditions)
     .sort({...sortConditions, createdAt: 1})
     .skip(skip)
     .limit(limit);
-  const total = await Achievement.countDocuments();
-
+  const total = await Newsletter.countDocuments();
   return {
     meta: {
       page,
       limit,
       total,
     },
-
     data: result,
   };
 };
 
-const getSingleAchievement = async (id: string): Promise<IAchievement | null> => {
-  const result = await Achievement.findById({_id: id}).lean();
+const getSingleNewsletter = async (id: string): Promise<INewsletter | null> => {
+  const result = await Newsletter.findById({_id: id}).lean();
   return result;
 };
 
-const createAchievement = async (payload: IAchievement): Promise<IAchievement> => {
-  const result = await Achievement.create(payload);
+const createNewsletter = async (payload: INewsletter): Promise<INewsletter> => {
+  const result = await Newsletter.create(payload);
   return result;
 };
-const updateAchievement = async (
+const updateNewsletter = async (
   id: string,
-  payload: Partial<IAchievement>,
-): Promise<IAchievement | null> => {
-  const result = await Achievement.findOneAndUpdate({_id: id}, payload, {
+  payload: Partial<INewsletter>,
+): Promise<INewsletter | null> => {
+  const result = await Newsletter.findOneAndUpdate({_id: id}, payload, {
     new: true,
   });
   return result;
 };
-const deleteAchievement = async (id: string): Promise<IAchievement | null> => {
-  const result = await Achievement.findByIdAndDelete({_id: id});
+const deleteNewsletter = async (id: string): Promise<INewsletter | null> => {
+  const result = await Newsletter.findByIdAndDelete({_id: id});
   return result;
 };
-export const achievementService = {
-  createAchievement,
-  getAllAchievement,
-  getSingleAchievement,
-  updateAchievement,
-  deleteAchievement,
+export const newsletterService = {
+  createNewsletter,
+  getAllNewsletter,
+  getSingleNewsletter,
+  updateNewsletter,
+  deleteNewsletter,
 };

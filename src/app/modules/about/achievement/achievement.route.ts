@@ -19,4 +19,4 @@ router.patch(
 router.delete("/:id", AchievementController.deleteAchievement);
 router.get("/", AchievementController.getAllAchievement);
 
-export const AchievementValidationRoutes = router;
+export const AchievementRoutes = router;

@@ -2,40 +2,24 @@ import {z} from "zod";
 
 const createAchievementZodSchema = z.object({
   body: z.object({
-    content: z.string({
-      required_error: "Achievement content is required",
+    name: z.string({
+      required_error: "Achievement name is required",
     }),
-    satisfy: z.string({
-      required_error: "Achievement satisfy is required",
-    }),
-    projects: z.string({
-      required_error: "Achievement projects is required",
-    }),
-    experience: z.string({
-      required_error: "Achievement experience is required",
+    value: z.string({
+      required_error: "Achievement value is required",
     }),
   }),
 });
 const updateAchievementZodSchema = z.object({
   body: z.object({
-    content: z
+    name: z
       .string({
-        required_error: "Achievement content is required",
+        required_error: "Achievement name is required",
       })
       .optional(),
-    satisfy: z
+    value: z
       .string({
-        required_error: "Achievement satisfy is required",
-      })
-      .optional(),
-    projects: z
-      .string({
-        required_error: "Achievement projects is required",
-      })
-      .optional(),
-    experience: z
-      .string({
-        required_error: "Achievement experience is required",
+        required_error: "Achievement value is required",
       })
       .optional(),
   }),

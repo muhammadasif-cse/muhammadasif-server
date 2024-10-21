@@ -54,6 +54,13 @@ const globalErrorHandler: ErrorRequestHandler = (
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
     errorMessages = simplifiedError.errorMessages;
+  } else if (error.code === 11000) {
+    statusCode = 409;
+    message = "Duplicate key error";
+    errorMessages = Object.keys(error.keyValue).map((key) => ({
+      path: key,
+      message: `${key} already exists.`,
+    }));
   } else if (error.error) {
     statusCode = error.error.http_code;
     message = error.error.message;

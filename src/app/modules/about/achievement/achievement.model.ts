@@ -3,22 +3,12 @@ import {AchievementModel, IAchievement} from "./achievement.interface";
 
 const AchievementSchema = new Schema<IAchievement, AchievementModel>(
   {
-    content: {
+    name: {
       type: String,
       required: true,
       unique: true,
     },
-    experience: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    projects: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    satisfy: {
+    value: {
       type: String,
       required: true,
       unique: true,
