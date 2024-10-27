@@ -9,6 +9,7 @@ import {FileUploadRoutes} from "../modules/file/file.route";
 import {AboutMeRoutes} from "../modules/about/me/me.route";
 import {AchievementRoutes} from "../modules/about/achievement/achievement.route";
 import {NewsletterRoutes} from "../modules/about/newsletter/newsletter.route";
+import {GalleryRoutes} from "../modules/about/gallery/gallery.route";
 const router = express.Router();
 
 const moduleRoutes = [
@@ -22,6 +23,7 @@ const moduleRoutes = [
   {path: "/about/me", route: AboutMeRoutes},
   {path: "/about/achievement", route: AchievementRoutes},
   {path: "/newsletter", route: NewsletterRoutes},
+  {path: "/gallery", route: GalleryRoutes},
 ];
 
 moduleRoutes.forEach(({path, route}) => router.use(path, route));
