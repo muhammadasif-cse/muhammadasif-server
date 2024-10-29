@@ -14,6 +14,7 @@ const file_route_1 = require("../modules/file/file.route");
 const me_route_1 = require("../modules/about/me/me.route");
 const achievement_route_1 = require("../modules/about/achievement/achievement.route");
 const newsletter_route_1 = require("../modules/about/newsletter/newsletter.route");
+const gallery_route_1 = require("../modules/about/gallery/gallery.route");
 const router = express_1.default.Router();
 const moduleRoutes = [
     { path: "/social", route: social_route_1.SocialRoutes },
@@ -26,6 +27,7 @@ const moduleRoutes = [
     { path: "/about/me", route: me_route_1.AboutMeRoutes },
     { path: "/about/achievement", route: achievement_route_1.AchievementRoutes },
     { path: "/newsletter", route: newsletter_route_1.NewsletterRoutes },
+    { path: "/gallery", route: gallery_route_1.GalleryRoutes },
 ];
 moduleRoutes.forEach(({ path, route }) => router.use(path, route));
 exports.default = router;
