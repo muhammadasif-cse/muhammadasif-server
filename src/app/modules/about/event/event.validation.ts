@@ -87,7 +87,8 @@ const updateEventZodSchema = z.object({
       )
       .nonempty({
         message: "Event images does not allow empty array",
-      }),
+      })
+      .optional(),
     imgText: z
       .string({
         required_error: "Event image text is required",
