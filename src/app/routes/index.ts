@@ -11,6 +11,7 @@ import {ExperienceRoutes} from "../modules/home/experience/experience.route";
 import {SkillRoutes} from "../modules/home/skill/skill.route";
 import {SocialRoutes} from "../modules/home/social/social.route";
 import {TestimonialRoutes} from "../modules/home/testimonial/testimonial.route";
+import {ProjectRoutes} from "../modules/works/projects/project.route";
 const router = express.Router();
 
 const moduleRoutes = [
@@ -26,6 +27,7 @@ const moduleRoutes = [
   {path: "/newsletter", route: NewsletterRoutes},
   {path: "/gallery", route: GalleryRoutes},
   {path: "/event", route: EventRoutes},
+  {path: "/projects", route: ProjectRoutes},
 ];
 
 moduleRoutes.forEach(({path, route}) => router.use(path, route));
