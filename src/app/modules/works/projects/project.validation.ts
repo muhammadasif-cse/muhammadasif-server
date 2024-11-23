@@ -9,13 +9,26 @@ const createProjectZodSchema = z.object({
       required_error: "Project description is required",
     }),
     live: z.string({
-      required_error: "Project live is required",
+      required_error: "Project live URL is required",
     }),
     img: z.string({
-      required_error: "Project image is required",
+      required_error: "Project image URL is required",
+    }),
+    date: z.string({
+      required_error: "Project date is required",
+    }),
+    category: z.string({
+      required_error: "Project category is required",
+    }),
+    tags: z.string({
+      required_error: "Project tags are required",
+    }),
+    techstack: z.string({
+      required_error: "Project tech stack is required",
     }),
   }),
 });
+
 const updateProjectZodSchema = z.object({
   body: z.object({
     name: z
@@ -30,12 +43,32 @@ const updateProjectZodSchema = z.object({
       .optional(),
     live: z
       .string({
-        required_error: "Project live is required",
+        required_error: "Project live URL is required",
       })
       .optional(),
     img: z
       .string({
-        required_error: "Project image is required",
+        required_error: "Project image URL is required",
+      })
+      .optional(),
+    date: z
+      .string({
+        required_error: "Project date is required",
+      })
+      .optional(),
+    category: z
+      .string({
+        required_error: "Project category is required",
+      })
+      .optional(),
+    tags: z
+      .string({
+        required_error: "Project tags are required",
+      })
+      .optional(),
+    techstack: z
+      .string({
+        required_error: "Project tech stack is required",
       })
       .optional(),
   }),

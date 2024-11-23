@@ -2,21 +2,21 @@ import {SortOrder} from "mongoose";
 import {paginationHelper} from "../../../../helpers/paginationHelper";
 import {IGenericResponse} from "../../../interfaces/common";
 import {IPaginationOptions} from "../../../interfaces/pagination";
-import {projectSearchableFields} from "./project.constant";
-import {IProject, IProjectFilters} from "./project.interface";
-import {Project} from "./project.model";
+import {techstackSearchableFields} from "./techstack.constant";
+import {ITechstack, ITechstackFilters} from "./techstack.interface";
+import {Techstack} from "./techstack.model";
 
-const getAllProject = async (
-  filters: IProjectFilters,
+const getAllTechstack = async (
+  filters: ITechstackFilters,
   paginationOptions: IPaginationOptions,
-): Promise<IGenericResponse<IProject[]>> => {
+): Promise<IGenericResponse<ITechstack[]>> => {
   const {searchTerm, ...filtersData} = filters;
 
   const andConditions = [];
 
   if (searchTerm) {
     andConditions.push({
-      $or: projectSearchableFields.map((field) => ({
+      $or: techstackSearchableFields.map((field) => ({
         [field]: {
           $regex: searchTerm,
           $options: "i",
@@ -41,46 +41,47 @@ const getAllProject = async (
     sortConditions[sortBy] = sortOrder;
   }
   const whereConditions = andConditions.length > 0 ? {$and: andConditions} : {};
-  const result = await Project.find(whereConditions)
-    .sort({...sortConditions, createdAt: 1})
+  const result = await Techstack.find(whereConditions)
+    .sort({...sortConditions, createdAt: -1})
     .skip(skip)
     .limit(limit);
-  const total = await Project.countDocuments();
-
+  const total = await Techstack.countDocuments();
   return {
     meta: {
       page,
       limit,
       total,
     },
-
     data: result,
   };
 };
 
-const getSingleProject = async (id: string): Promise<IProject | null> => {
-  const result = await Project.findById({_id: id}).populate("techstack").lean();
+const getSingleTechstack = async (id: string): Promise<ITechstack | null> => {
+  const result = await Techstack.findById({_id: id}).lean();
   return result;
 };
 
-const createProject = async (payload: IProject): Promise<IProject> => {
-  const result = (await Project.create(payload)).populate("techstack");
+const createTechstack = async (payload: ITechstack): Promise<ITechstack> => {
+  const result = await Techstack.create(payload);
   return result;
 };
-const updateProject = async (id: string, payload: Partial<IProject>): Promise<IProject | null> => {
-  const result = await Project.findOneAndUpdate({_id: id}, payload, {
+const updateTechstack = async (
+  id: string,
+  payload: Partial<ITechstack>,
+): Promise<ITechstack | null> => {
+  const result = await Techstack.findOneAndUpdate({_id: id}, payload, {
     new: true,
   });
   return result;
 };
-const deleteProject = async (id: string): Promise<IProject | null> => {
-  const result = await Project.findByIdAndDelete({_id: id});
+const deleteTechstack = async (id: string): Promise<ITechstack | null> => {
+  const result = await Techstack.findByIdAndDelete({_id: id});
   return result;
 };
-export const ProjectService = {
-  createProject,
-  getAllProject,
-  getSingleProject,
-  updateProject,
-  deleteProject,
+export const TechstackService = {
+  createTechstack,
+  getAllTechstack,
+  getSingleTechstack,
+  updateTechstack,
+  deleteTechstack,
 };

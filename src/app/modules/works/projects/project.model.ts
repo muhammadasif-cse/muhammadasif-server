@@ -13,12 +13,29 @@ const ProjectSchema = new Schema<IProject, ProjectModel>(
       required: true,
     },
     live: {
-      unique: true,
       type: String,
       required: true,
+      unique: true,
     },
     img: {
       type: String,
+      required: true,
+    },
+    date: {
+      type: Date,
+      required: true,
+    },
+    category: {
+      type: String,
+      required: true,
+    },
+    tags: {
+      type: String,
+      required: true,
+    },
+    techstack: {
+      type: Schema.Types.ObjectId,
+      ref: "Techstack",
       required: true,
     },
   },
