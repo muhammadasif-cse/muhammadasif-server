@@ -16,6 +16,8 @@ const experience_route_1 = require("../modules/home/experience/experience.route"
 const skill_route_1 = require("../modules/home/skill/skill.route");
 const social_route_1 = require("../modules/home/social/social.route");
 const testimonial_route_1 = require("../modules/home/testimonial/testimonial.route");
+const project_route_1 = require("../modules/works/projects/project.route");
+const techstack_route_1 = require("../modules/works/techstack/techstack.route");
 const router = express_1.default.Router();
 const moduleRoutes = [
     { path: "/social", route: social_route_1.SocialRoutes },
@@ -30,6 +32,8 @@ const moduleRoutes = [
     { path: "/newsletter", route: newsletter_route_1.NewsletterRoutes },
     { path: "/gallery", route: gallery_route_1.GalleryRoutes },
     { path: "/event", route: event_route_1.EventRoutes },
+    { path: "/projects", route: project_route_1.ProjectRoutes },
+    { path: "/techstack", route: techstack_route_1.TechstackRoutes },
 ];
 moduleRoutes.forEach(({ path, route }) => router.use(path, route));
 exports.default = router;
