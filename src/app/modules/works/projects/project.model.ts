@@ -22,7 +22,7 @@ const ProjectSchema = new Schema<IProject, ProjectModel>(
       required: true,
     },
     date: {
-      type: Date,
+      type: String,
       required: true,
     },
     category: {

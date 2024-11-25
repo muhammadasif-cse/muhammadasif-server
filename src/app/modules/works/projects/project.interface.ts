@@ -6,7 +6,7 @@ export interface IProject {
   description: string;
   live: string;
   img: string;
-  date: Date;
+  date: string;
   category: string;
   tags: string;
   techstack: Types.ObjectId | ITechstack;
