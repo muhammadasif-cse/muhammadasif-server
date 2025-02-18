@@ -1,16 +1,11 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { ExpressAdapter } from '@nestjs/platform-express';
-import * as express from 'express';
-import * as serverless from 'serverless-http';
 import { AppModule } from './app.module';
 
-const server = express();
-
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
-  await app.init();
-  return server;
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe());
+  await app.listen(process.env.PORT ?? 5000);
 }
-
-// Export the serverless handler
-export const handler = serverless(await bootstrap());
+bootstrap();
