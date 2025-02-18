@@ -1,11 +1,12 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
+import { Handler } from 'aws-lambda';
 import * as express from 'express';
 import * as serverless from 'serverless-http';
 import { AppModule } from './app.module';
 
-async function bootstrap() {
+async function bootstrap(): Promise<Handler> {
   const expressApp = express();
   const app = await NestFactory.create(
     AppModule,
@@ -18,4 +19,4 @@ async function bootstrap() {
   return serverless(expressApp);
 }
 
-export const handler = bootstrap().then((app) => app);
+export const handler = bootstrap();
