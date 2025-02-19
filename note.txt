@@ -1,0 +1,15 @@
+1. Generate migration:
+    * npm run migration:generate --name=CreateUsersTable
+
+2. Run migrations:
+    * npm run migration:run
+
+3. Revert last migration:
+    * npm run migration:revert
+
+4. Start development:
+    * npm run start:dev
+
+5. Start production:
+    * npm run build
+    * npm run start:prod
