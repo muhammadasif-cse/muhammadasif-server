@@ -1,5 +1,7 @@
-import { Module } from '@nestjs/common';
+import { Module, VersioningType } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -31,20 +33,30 @@ import { ProjectsModule } from './projects/projects.module';
   providers: [AppService],
 })
 export class AppModule {}
-// {
-//   const appOptions = { cors: true };
-//   const app = await NestFactory.create(ApplicationModule, appOptions);
-//   app.setGlobalPrefix('api');
 
-//   const options = new DocumentBuilder()
-//     .setTitle('NestJS Realworld Example App')
-//     .setDescription('The Realworld API description')
-//     .setVersion('1.0')
-//     .setBasePath('api')
-//     .addBearerAuth()
-//     .build();
-//   const document = SwaggerModule.createDocument(app, options);
-//   SwaggerModule.setup('/docs', app, document);
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule, { cors: true });
 
-//   await app.listen(3000);
-// }
+  // Enable versioning
+  app.enableVersioning({
+    type: VersioningType.URI,
+    prefix: 'api/v',
+  });
+
+  // Set global prefix
+  app.setGlobalPrefix('api');
+
+  // Swagger configuration
+  const options = new DocumentBuilder()
+    .setTitle('NestJS Realworld Example App')
+    .setDescription('The Realworld API description')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('/docs', app, document);
+
+  await app.listen(3000);
+}
+
+bootstrap();
