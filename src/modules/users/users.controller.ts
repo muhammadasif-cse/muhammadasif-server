@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
-import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 import { PaginatedResponse } from '../../common/interfaces/pagination.interface';
 import { User } from './entities/user.entity';
@@ -15,29 +15,6 @@ export class UsersController {
   @ApiQuery({ name: 'limit', required: false, example: 10 })
   @ApiQuery({ name: 'sortBy', required: false, example: 'createdAt' })
   @ApiQuery({ name: 'sortOrder', required: false, example: 'DESC' })
-  @ApiResponse({
-    status: 200,
-    description: 'Paginated list of users',
-    schema: {
-      example: {
-        data: [
-          {
-            id: 1,
-            name: 'John Doe',
-            email: 'john@example.com',
-          },
-        ],
-        meta: {
-          totalItems: 1,
-          currentPage: 1,
-          totalPages: 1,
-          itemsPerPage: 10,
-          sortBy: 'createdAt',
-          sortOrder: 'DESC',
-        },
-      },
-    },
-  })
   async findAll(
     @Query() paginationDto: PaginationDto,
   ): Promise<PaginatedResponse<User>> {
