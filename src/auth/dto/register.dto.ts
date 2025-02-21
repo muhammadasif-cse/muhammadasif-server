@@ -28,4 +28,10 @@ export class RegisterDto {
   @IsNotEmpty({ message: 'Name should not be empty' })
   @MinLength(3, { message: 'Name must be at least 3 characters long' })
   name: string;
+
+  @IsNotEmpty({ message: 'Role should not be empty' })
+  @Matches(/^(user|admin|moderator)$/, {
+    message: 'Role must be either user, admin or moderator',
+  })
+  role: string;
 }

@@ -1,6 +1,8 @@
-export interface PaginatedResponse<T> {
+export interface APIResponse<T> {
+  status: number;
+  message: string;
   data: T[];
-  meta: {
+  meta?: {
     totalItems: number;
     currentPage: number;
     totalPages: number;

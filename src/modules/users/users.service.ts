@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { PaginatedResponse } from 'src/common/interfaces/pagination.interface';
+import { APIResponse } from 'src/common/interfaces/api-response.interface';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 
@@ -12,9 +12,7 @@ export class UsersService {
     private readonly usersRepository: Repository<User>,
   ) {}
 
-  async findAll(
-    paginationDto: PaginationDto,
-  ): Promise<PaginatedResponse<User>> {
+  async findAll(paginationDto: PaginationDto): Promise<APIResponse<User>> {
     const { page, limit, sortBy, sortOrder } = paginationDto;
 
     const validSortBy = ['id', 'createdAt'];
@@ -31,6 +29,8 @@ export class UsersService {
     const totalPages = Math.ceil(totalItems / limit);
 
     return {
+      status: HttpStatus.CREATED,
+      message: 'Users retrieved successfully',
       data: users,
       meta: {
         totalItems,
