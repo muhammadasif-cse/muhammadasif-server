@@ -26,7 +26,9 @@ export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
   @Post()
-  async create(@Body() createProjectDto: CreateProjectDto): Promise<Project> {
+  async create(
+    @Body() createProjectDto: CreateProjectDto,
+  ): Promise<APIResponse<Project>> {
     return this.projectsService.create(createProjectDto);
   }
 
@@ -42,7 +44,7 @@ export class ProjectsController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<Project> {
+  async findOne(@Param('id') id: string): Promise<APIResponse<Project>> {
     return this.projectsService.findOne(id);
   }
 
@@ -50,12 +52,12 @@ export class ProjectsController {
   async update(
     @Param('id') id: string,
     @Body() updateProjectDto: UpdateProjectDto,
-  ): Promise<Project> {
+  ): Promise<APIResponse<Project>> {
     return this.projectsService.update(id, updateProjectDto);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<void> {
+  async remove(@Param('id') id: string): Promise<APIResponse<Project>> {
     return this.projectsService.remove(id);
   }
 }

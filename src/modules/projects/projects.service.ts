@@ -4,6 +4,7 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { APIResponse } from 'src/common/interfaces/api-response.interface';
 import { Repository } from 'typeorm';
 import { CreateProjectDto } from './dto/create.project.dto';
+import { UpdateProjectDto } from './dto/update.project.dto';
 import { Project } from './project.entity';
 
 @Injectable()
@@ -14,13 +15,19 @@ export class ProjectsService {
   ) {}
 
   // Create a new project
-  async create(createProjectDto: CreateProjectDto): Promise<Project> {
+  async create(
+    createProjectDto: CreateProjectDto,
+  ): Promise<APIResponse<Project>> {
     const project = this.projectsRepository.create(createProjectDto);
-    return this.projectsRepository.save(project);
+    const projectCreated = await this.projectsRepository.save(project);
+    return {
+      status: HttpStatus.CREATED,
+      message: 'Project created successfully',
+      data: projectCreated,
+    };
   }
 
   // Get all projects
-
   async findAll(paginationDto: PaginationDto): Promise<APIResponse<Project>> {
     const { page, limit, sortBy, sortOrder } = paginationDto;
 
@@ -53,21 +60,41 @@ export class ProjectsService {
   }
 
   // Get a single project by ID
-  async findOne(id: string): Promise<Project> {
-    return this.projectsRepository.findOne({ where: { id } });
+  async findOne(id: string): Promise<APIResponse<Project>> {
+    const project = await this.projectsRepository.findOne({ where: { id } });
+
+    return {
+      status: HttpStatus.OK,
+      message: 'Project retrieved successfully',
+      data: project,
+    };
   }
 
   // Update a project
   async update(
     id: string,
-    updateProjectDto: CreateProjectDto,
-  ): Promise<Project> {
+    updateProjectDto: UpdateProjectDto,
+  ): Promise<APIResponse<Project>> {
     await this.projectsRepository.update(id, updateProjectDto);
-    return this.projectsRepository.findOne({ where: { id } });
+    const updatedProject = await this.projectsRepository.findOne({
+      where: { id },
+    });
+    return {
+      status: HttpStatus.OK,
+      message: 'Project updated successfully',
+      data: updatedProject,
+    };
   }
 
   // Delete a project
-  async remove(id: string): Promise<void> {
-    await this.projectsRepository.delete(id);
+  async remove(id: string): Promise<APIResponse<Project>> {
+    const projectDeleted = await this.projectsRepository.delete(id);
+    if (projectDeleted.affected === 0) {
+      throw new Error('Project not found');
+    }
+    return {
+      status: HttpStatus.OK,
+      message: 'Project deleted successfully',
+    };
   }
 }
