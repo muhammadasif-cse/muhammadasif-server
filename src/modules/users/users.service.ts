@@ -17,11 +17,14 @@ export class UsersService {
   ): Promise<PaginatedResponse<User>> {
     const { page, limit, sortBy, sortOrder } = paginationDto;
 
+    const validSortBy = ['id', 'createdAt'];
+    const orderBy = validSortBy.includes(sortBy) ? sortBy : 'createdAt';
+
     const [users, totalItems] = await this.usersRepository.findAndCount({
       skip: (page - 1) * limit,
       take: limit,
       order: {
-        [sortBy]: sortOrder,
+        [orderBy]: sortOrder,
       },
     });
 
@@ -34,7 +37,7 @@ export class UsersService {
         currentPage: page,
         totalPages,
         itemsPerPage: limit,
-        sortBy,
+        sortBy: orderBy,
         sortOrder,
       },
     };
