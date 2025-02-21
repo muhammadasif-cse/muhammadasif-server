@@ -61,6 +61,13 @@ export class SocialsService {
   async findOne(id: string): Promise<APIResponse<Social>> {
     const social = await this.socialsRepository.findOne({ where: { id } });
 
+    if (!social) {
+      return {
+        status: HttpStatus.NOT_FOUND,
+        message: 'Social not found',
+      };
+    }
+
     return {
       status: HttpStatus.OK,
       message: 'Social retrieved successfully',
@@ -77,6 +84,13 @@ export class SocialsService {
     const updatedSocial = await this.socialsRepository.findOne({
       where: { id },
     });
+
+    if (!updatedSocial) {
+      return {
+        status: HttpStatus.NOT_FOUND,
+        message: 'Social not found',
+      };
+    }
     return {
       status: HttpStatus.OK,
       message: 'Social updated successfully',
@@ -88,7 +102,10 @@ export class SocialsService {
   async remove(id: string): Promise<APIResponse<Social>> {
     const socialDeleted = await this.socialsRepository.delete(id);
     if (socialDeleted.affected === 0) {
-      throw new Error('Social not found');
+      return {
+        status: HttpStatus.NOT_FOUND,
+        message: 'Social not found',
+      };
     }
     return {
       status: HttpStatus.OK,

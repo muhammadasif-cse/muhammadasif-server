@@ -63,6 +63,13 @@ export class ProjectsService {
   async findOne(id: string): Promise<APIResponse<Project>> {
     const project = await this.projectsRepository.findOne({ where: { id } });
 
+    if (!project) {
+      return {
+        status: HttpStatus.NOT_FOUND,
+        message: 'Project not found',
+      };
+    }
+
     return {
       status: HttpStatus.OK,
       message: 'Project retrieved successfully',
@@ -79,6 +86,14 @@ export class ProjectsService {
     const updatedProject = await this.projectsRepository.findOne({
       where: { id },
     });
+
+    if (!updatedProject) {
+      return {
+        status: HttpStatus.NOT_FOUND,
+        message: 'Project not found',
+      };
+    }
+
     return {
       status: HttpStatus.OK,
       message: 'Project updated successfully',
@@ -90,7 +105,10 @@ export class ProjectsService {
   async remove(id: string): Promise<APIResponse<Project>> {
     const projectDeleted = await this.projectsRepository.delete(id);
     if (projectDeleted.affected === 0) {
-      throw new Error('Project not found');
+      return {
+        status: HttpStatus.NOT_FOUND,
+        message: 'Project not found',
+      };
     }
     return {
       status: HttpStatus.OK,
