@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/auth/decorators/roles.decorator';
-import { AppAuthGuard } from 'src/auth/guards/app-auth.guard';
+import { ApiKeyGuard } from 'src/auth/guards/app-auth.guard';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { PaginationDto } from '../../common/dto/pagination.dto';
@@ -11,7 +11,7 @@ import { UsersService } from './users.service';
 
 @ApiTags('users')
 @Controller('users')
-@UseGuards(JwtAuthGuard, AppAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, ApiKeyGuard, RolesGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
