@@ -15,8 +15,8 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "Welcome to server!"', () => {
-      expect(appController.getServer()).toBe('Welcome to server!');
+    it('should return "Server is running"', () => {
+      expect(appController.getServer()).toBe('Server is running');
     });
   });
 });
