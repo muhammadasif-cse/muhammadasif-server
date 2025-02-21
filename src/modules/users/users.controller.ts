@@ -6,7 +6,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 import { APIResponse } from '../../common/interfaces/api-response.interface';
-import { User } from './entities/user.entity';
+import { User } from './user.entity';
 import { UsersService } from './users.service';
 
 @ApiTags('users')
@@ -28,7 +28,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<User> {
+  async findOne(@Param('id') id: string): Promise<APIResponse<User>> {
     return this.usersService.findOne(id);
   }
 }

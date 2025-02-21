@@ -1,7 +1,7 @@
 export interface APIResponse<T> {
   status: number;
   message: string;
-  data: T[];
+  data: T[] | T;
   meta?: {
     totalItems: number;
     currentPage: number;

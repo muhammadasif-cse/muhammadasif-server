@@ -1,23 +1,36 @@
-import { Exclude } from 'class-transformer';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class User {
+export class Project {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ unique: true })
-  email: string;
+  @Column()
+  title: string;
 
   @Column()
-  @Exclude()
-  password: string;
+  description: string;
 
-  @Column({ nullable: true })
-  name: string;
+  @Column('simple-array')
+  techStack: string[];
 
-  @Column({ default: 'user' })
-  role: string;
+  @Column('simple-array')
+  features: string[];
+
+  @Column()
+  liveUrl: string;
+
+  @Column()
+  githubUrl: string;
+
+  @Column()
+  image: string;
+
+  @Column()
+  highlightTitle: string;
+
+  @Column()
+  highlightDescription: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

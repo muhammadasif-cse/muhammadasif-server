@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { APIResponse } from 'src/common/interfaces/api-response.interface';
 import { Repository } from 'typeorm';
-import { User } from './entities/user.entity';
+import { User } from './user.entity';
 
 @Injectable()
 export class UsersService {
@@ -12,7 +12,9 @@ export class UsersService {
     private readonly usersRepository: Repository<User>,
   ) {}
 
-  async findAll(paginationDto: PaginationDto): Promise<APIResponse<User>> {
+  async findAll(
+    paginationDto: PaginationDto,
+  ): Promise<APIResponse<User | any>> {
     const { page, limit, sortBy, sortOrder } = paginationDto;
 
     const validSortBy = ['id', 'createdAt'];
@@ -28,10 +30,15 @@ export class UsersService {
 
     const totalPages = Math.ceil(totalItems / limit);
 
+    let usersResponse = users.map((user: User) => {
+      const { password, ...userWithoutPassword } = user;
+      return userWithoutPassword;
+    });
+
     return {
       status: HttpStatus.CREATED,
       message: 'Users retrieved successfully',
-      data: users,
+      data: usersResponse,
       meta: {
         totalItems,
         currentPage: page,
@@ -43,7 +50,13 @@ export class UsersService {
     };
   }
 
-  async findOne(id: string): Promise<User> {
-    return this.usersRepository.findOne({ where: { id } });
+  async findOne(id: string): Promise<APIResponse<User | any>> {
+    const user = await this.usersRepository.findOne({ where: { id } });
+    let { password, ...userWithoutPassword } = user;
+    return {
+      status: HttpStatus.OK,
+      message: 'User retrieved successfully',
+      data: userWithoutPassword,
+    };
   }
 }

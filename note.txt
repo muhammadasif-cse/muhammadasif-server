@@ -1,5 +1,5 @@
 1. Generate migration:
-    * npm run migration:generate --name=CreateUsersTable
+    * npm run migration:generate --name=CreateTable
 
 2. Run migrations:
     * npm run migration:run

@@ -12,10 +12,7 @@ import { UsersModule } from './modules/users/users.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: [
-        path.join(process.cwd(), 'src/config/.env.development.local'),
-        path.join(process.cwd(), 'src/config/.env.production.local'),
-      ],
+      envFilePath: [path.join(process.cwd(), 'src/config/.env')],
       load: [configuration],
     }),
     TypeOrmModule.forRootAsync({
@@ -34,7 +31,8 @@ import { UsersModule } from './modules/users/users.module';
           cli: {
             migrationsDir: 'src/migrations',
           },
-          synchronize: process.env.NODE_ENV === 'development',
+          synchronize: false,
+          logging: process.env.NODE_ENV === 'development',
         };
       },
     }),

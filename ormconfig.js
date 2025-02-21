@@ -3,7 +3,7 @@ const path = require('path');
 const { config } = require('dotenv');
 
 // Load environment variables
-config({ path: path.resolve(__dirname, '.env') });
+config({ path: path.join(process.cwd(), 'src/config/.env') });
 
 module.exports = new DataSource({
   type: 'mysql',
