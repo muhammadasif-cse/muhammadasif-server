@@ -33,8 +33,12 @@ export class AuthService {
   async login(loginDto: LoginDto) {
     const user = await this.validateUser(loginDto.email, loginDto.password);
     const payload = { sub: user.id, email: user.email, role: user.role };
+
     return {
+      code: 200,
+      message: 'Login successful',
       access_token: this.jwtService.sign(payload),
+      user: user,
     };
   }
 
@@ -51,6 +55,9 @@ export class AuthService {
       password: hashedPassword,
     });
     await this.userRepository.save(user);
-    return { message: 'User registered successfully' };
+    return {
+      code: 201,
+      message: 'User registered successfully',
+    };
   }
 }
