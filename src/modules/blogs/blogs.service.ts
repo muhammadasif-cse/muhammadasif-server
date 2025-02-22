@@ -4,14 +4,28 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { APIResponse } from 'src/common/interfaces/api-response.interface';
 import { Repository } from 'typeorm';
 import { CreateBlogDto } from './dto/create.blog.dto';
+import { CreateCommentDto } from './dto/create.comment.dto';
+import { CreateLikeDto } from './dto/create.like.dto';
+import { CreateRatingDto } from './dto/create.rating.dto';
 import { UpdateBlogDto } from './dto/update.blog.dto';
+import { UpdateCommentDto } from './dto/update.comment.dto';
+import { UpdateRatingDto } from './dto/update.rating.dto';
 import { Blog } from './entity/blog.entity';
+import { Comment } from './entity/comment.entity';
+import { Like } from './entity/like.entity';
+import { Rating } from './entity/rating.entity';
 
 @Injectable()
 export class BlogsService {
   constructor(
     @InjectRepository(Blog)
     private blogsRepository: Repository<Blog>,
+    @InjectRepository(Comment)
+    private commentsRepository: Repository<Comment>,
+    @InjectRepository(Like)
+    private likesRepository: Repository<Like>,
+    @InjectRepository(Rating)
+    private ratingsRepository: Repository<Rating>,
   ) {}
 
   // Create a new blog
@@ -25,25 +39,22 @@ export class BlogsService {
     };
   }
 
-  // Get all blogs
+  // Get all blogs with pagination
   async findAll(paginationDto: PaginationDto): Promise<APIResponse<Blog>> {
     const { page, limit, sortBy, sortOrder } = paginationDto;
-
     const validSortBy = ['id', 'createdAt'];
     const orderBy = validSortBy.includes(sortBy) ? sortBy : 'createdAt';
 
     const [blogs, totalItems] = await this.blogsRepository.findAndCount({
       skip: (page - 1) * limit,
       take: limit,
-      order: {
-        [orderBy]: sortOrder,
-      },
+      order: { [orderBy]: sortOrder },
     });
 
     const totalPages = Math.ceil(totalItems / limit);
 
     return {
-      status: HttpStatus.CREATED,
+      status: HttpStatus.OK,
       message: 'Blogs retrieved successfully',
       data: blogs,
       meta: {
@@ -57,9 +68,12 @@ export class BlogsService {
     };
   }
 
-  // Get a single blog by ID
+  // Get a single blog by ID including its comments, likes, and ratings
   async findOne(id: string): Promise<APIResponse<Blog>> {
-    const blog = await this.blogsRepository.findOne({ where: { id } });
+    const blog = await this.blogsRepository.findOne({
+      where: { id },
+      relations: ['comments', 'likes', 'ratings'],
+    });
 
     if (!blog) {
       return {
@@ -81,9 +95,7 @@ export class BlogsService {
     updateBlogDto: UpdateBlogDto,
   ): Promise<APIResponse<Blog>> {
     await this.blogsRepository.update(id, updateBlogDto);
-    const updatedBlog = await this.blogsRepository.findOne({
-      where: { id },
-    });
+    const updatedBlog = await this.blogsRepository.findOne({ where: { id } });
 
     if (!updatedBlog) {
       return {
@@ -113,4 +125,149 @@ export class BlogsService {
       message: 'Blog deleted successfully',
     };
   }
+
+  // Add a comment to a blog
+  async addComment(
+    blogId: string,
+    createCommentDto: CreateCommentDto,
+  ): Promise<APIResponse<Comment>> {
+    // Ensure that the blog exists (optional, based on your use case)
+    const blog = await this.blogsRepository.findOne({ where: { id: blogId } });
+    if (!blog) {
+      return {
+        status: HttpStatus.NOT_FOUND,
+        message: 'Blog not found',
+      };
+    }
+
+    // Associate the comment with the blog ID
+    createCommentDto.blogId = blogId;
+    const comment = this.commentsRepository.create(createCommentDto);
+    const savedComment = await this.commentsRepository.save(comment);
+    return {
+      status: HttpStatus.CREATED,
+      message: 'Comment added successfully',
+      data: savedComment,
+    };
+  }
+
+  // Update a comment (or reply)
+  async updateComment(
+    id: string,
+    blogId: string,
+    updateCommentDto: UpdateCommentDto,
+  ): Promise<APIResponse<Comment>> {
+    const comment = await this.commentsRepository.findOne({
+      where: { id: id, blogId: blogId },
+    });
+    if (!comment) {
+      return {
+        status: HttpStatus.NOT_FOUND,
+        message: 'Comment not found',
+      };
+    }
+    await this.commentsRepository.update(id, updateCommentDto);
+    const updatedComment = await this.commentsRepository.findOne({
+      where: { id: id },
+    });
+    return {
+      status: HttpStatus.OK,
+      message: 'Comment updated successfully',
+      data: updatedComment,
+    };
+  }
+
+  // Add a like to a blog
+  async addLike(
+    blogId: string,
+    createLikeDto: CreateLikeDto,
+  ): Promise<APIResponse<Like>> {
+    // Optionally check if the blog exists
+    const blog = await this.blogsRepository.findOne({ where: { id: blogId } });
+    if (!blog) {
+      return {
+        status: HttpStatus.NOT_FOUND,
+        message: 'Blog not found',
+      };
+    }
+
+    createLikeDto.blogId = blogId;
+    const like = this.likesRepository.create(createLikeDto);
+    const savedLike = await this.likesRepository.save(like);
+    return {
+      status: HttpStatus.CREATED,
+      message: 'Like added successfully',
+      data: savedLike,
+    };
+  }
+
+  // Remove a like (to unlike)
+  async removeLike(blogId: string, id: string): Promise<APIResponse<Like>> {
+    const like = await this.likesRepository.findOne({
+      where: { id: id, blogId: blogId },
+    });
+    if (!like) {
+      return {
+        status: HttpStatus.NOT_FOUND,
+        message: 'Like not found',
+      };
+    }
+    await this.likesRepository.delete(id);
+    return {
+      status: HttpStatus.OK,
+      message: 'Like removed successfully',
+    };
+  }
+
+  // Add a rating to a blog
+  async addRating(
+    blogId: string,
+    createRatingDto: CreateRatingDto,
+  ): Promise<APIResponse<Rating>> {
+    // Optionally check if the blog exists
+    const blog = await this.blogsRepository.findOne({ where: { id: blogId } });
+    if (!blog) {
+      return {
+        status: HttpStatus.NOT_FOUND,
+        message: 'Blog not found',
+      };
+    }
+
+    createRatingDto.blogId = blogId;
+    const rating = this.ratingsRepository.create(createRatingDto);
+    const savedRating = await this.ratingsRepository.save(rating);
+    return {
+      status: HttpStatus.CREATED,
+      message: 'Rating added successfully',
+      data: savedRating,
+    };
+  }
+
+  // Update a rating
+  async updateRating(
+    id: string,
+    blogId: string,
+    updateRatingDto: UpdateRatingDto,
+  ): Promise<APIResponse<Rating>> {
+    const rating = await this.ratingsRepository.findOne({
+      where: { id: id, blogId: blogId },
+    });
+    if (!rating) {
+      return {
+        status: HttpStatus.NOT_FOUND,
+        message: 'Rating not found',
+      };
+    }
+    await this.ratingsRepository.update(id, updateRatingDto);
+    const updatedRating = await this.ratingsRepository.findOne({
+      where: { id: id },
+    });
+    return {
+      status: HttpStatus.OK,
+      message: 'Rating updated successfully',
+      data: updatedRating,
+    };
+  }
 }
+
+// The BlogsService class contains methods to create, read, update, and delete blogs. It also contains methods to add comments, likes, and ratings to a blog. The service class uses the TypeORM repository to interact with the database.
