@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import configuration from './config/configuration';
 import { ProjectsModule } from './modules/projects/projects.module';
+import { SkillsModule } from './modules/skills/skills.module';
 import { SocialsModule } from './modules/socials/socials.module';
 import { UsersModule } from './modules/users/users.module';
 
@@ -42,6 +43,7 @@ import { UsersModule } from './modules/users/users.module';
     UsersModule,
     ProjectsModule,
     SocialsModule,
+    SkillsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

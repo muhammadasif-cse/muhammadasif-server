@@ -1,36 +1,21 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Project {
+export class Skill {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-  title: string;
+  name: string;
 
   @Column('longtext')
-  description: string;
-
-  @Column('simple-array')
-  techStack: string[];
-
-  @Column('simple-array')
-  features: string[];
-
-  @Column()
-  liveUrl: string;
-
-  @Column()
-  githubUrl: string;
-
-  @Column()
-  image: string;
-
-  @Column()
-  highlightTitle: string;
+  note: string;
 
   @Column('longtext')
-  highlightDescription: string;
+  message: string;
+
+  @Column()
+  img: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
