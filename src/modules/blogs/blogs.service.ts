@@ -182,8 +182,8 @@ export class BlogsService {
     const comments = await this.commentsRepository.find({ where: { blogId } });
     return {
       status: HttpStatus.OK,
-      data: comments,
       message: 'Comments retrieved successfully',
+      data: comments,
     };
   }
 
@@ -201,8 +201,8 @@ export class BlogsService {
     await this.commentsRepository.remove(comment);
     return {
       status: HttpStatus.OK,
-      data: comment,
       message: 'Comment deleted successfully',
+      data: comment,
     };
   }
 
