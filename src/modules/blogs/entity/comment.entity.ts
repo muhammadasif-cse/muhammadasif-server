@@ -22,7 +22,7 @@ export class Comment {
   @Column({ type: 'varchar', length: 255, nullable: true })
   parentCommentId: string;
 
-  @Column({ type: 'mediumtext', nullable: true })
+  @Column({ type: 'mediumtext', nullable: false })
   comment: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

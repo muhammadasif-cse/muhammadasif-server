@@ -15,7 +15,7 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { APIResponse } from 'src/common/interfaces/api-response.interface';
 import { BlogsService } from './blogs.service';
 import { CreateBlogDto } from './dto/create.blog.dto';
-import { CreateCommentDto } from './dto/create.comment.dto';
+import { CreateCommentDto, ReplyCommentDto } from './dto/create.comment.dto';
 import { CreateLikeDto } from './dto/create.like.dto';
 import { CreateRatingDto } from './dto/create.rating.dto';
 import { UpdateBlogDto } from './dto/update.blog.dto';
@@ -83,6 +83,20 @@ export class BlogsController {
     @Param('id') blogId: string,
   ): Promise<APIResponse<Comment[]>> {
     return this.blogsService.getComments(blogId);
+  }
+
+  // Endpoint to reply to a comment
+  @Post(':blogId/comments/:parentCommentId/reply')
+  async replyToComment(
+    @Param('blogId') blogId: string,
+    @Param('parentCommentId') parentCommentId: string,
+    @Body() replyCommentDto: ReplyCommentDto,
+  ): Promise<APIResponse<Comment>> {
+    return this.blogsService.replyToComment(
+      blogId,
+      parentCommentId,
+      replyCommentDto,
+    );
   }
 
   // Update a comment (or reply)

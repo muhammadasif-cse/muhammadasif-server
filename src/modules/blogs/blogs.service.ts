@@ -4,7 +4,7 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { APIResponse } from 'src/common/interfaces/api-response.interface';
 import { Repository } from 'typeorm';
 import { CreateBlogDto } from './dto/create.blog.dto';
-import { CreateCommentDto } from './dto/create.comment.dto';
+import { CreateCommentDto, ReplyCommentDto } from './dto/create.comment.dto';
 import { CreateLikeDto } from './dto/create.like.dto';
 import { CreateRatingDto } from './dto/create.rating.dto';
 import { UpdateBlogDto } from './dto/update.blog.dto';
@@ -151,10 +151,39 @@ export class BlogsService {
     };
   }
 
+  // Reply to a comment
+  async replyToComment(
+    blogId: string,
+    parentCommentId: string,
+    replyCommentDto: ReplyCommentDto,
+  ): Promise<APIResponse<Comment>> {
+    // Ensure that the parent comment exists
+    const parentComment = await this.commentsRepository.findOne({
+      where: { id: parentCommentId, blogId: blogId },
+    });
+    if (!parentComment) {
+      return {
+        status: HttpStatus.NOT_FOUND,
+        message: 'Parent comment not found',
+      };
+    }
+
+    // Associate the reply with the parent comment ID and blog ID
+    replyCommentDto.blogId = blogId;
+    replyCommentDto.parentCommentId = parentCommentId; // Ensure this is set correctly
+    const reply = this.commentsRepository.create(replyCommentDto);
+    const savedReply = await this.commentsRepository.save(reply);
+    return {
+      status: HttpStatus.CREATED,
+      message: 'Reply added successfully',
+      data: savedReply,
+    };
+  }
+
   // Update a comment (or reply)
   async updateComment(
-    id: string,
     blogId: string,
+    id: string,
     updateCommentDto: UpdateCommentDto,
   ): Promise<APIResponse<Comment>> {
     const comment = await this.commentsRepository.findOne({
@@ -169,7 +198,16 @@ export class BlogsService {
     await this.commentsRepository.update(id, updateCommentDto);
     const updatedComment = await this.commentsRepository.findOne({
       where: { id: id },
+      relations: ['replies'],
     });
+
+    // Ensure the updated comment does not include itself in the replies array
+    if (updatedComment.replies) {
+      updatedComment.replies = updatedComment.replies.filter(
+        (reply) => reply.id !== updatedComment.id,
+      );
+    }
+
     return {
       status: HttpStatus.OK,
       message: 'Comment updated successfully',
@@ -177,13 +215,32 @@ export class BlogsService {
     };
   }
 
-  // Get comments for a blog
+  // Get comments for a blog with nested replies
   async getComments(blogId: string): Promise<APIResponse<Comment[]>> {
-    const comments = await this.commentsRepository.find({ where: { blogId } });
+    const comments = await this.commentsRepository.find({
+      where: { blogId },
+      relations: ['replies'],
+    });
+
+    const organizeComments = (
+      comments: Comment[],
+      parentCommentId: string | null = null,
+    ): Comment[] => {
+      return comments
+        .filter((comment) => comment.parentCommentId === parentCommentId)
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+        .map((comment) => {
+          comment.replies = organizeComments(comments, comment.id);
+          return comment;
+        });
+    };
+
+    const nestedComments = organizeComments(comments);
+
     return {
       status: HttpStatus.OK,
       message: 'Comments retrieved successfully',
-      data: comments,
+      data: nestedComments,
     };
   }
 
@@ -298,5 +355,3 @@ export class BlogsService {
     };
   }
 }
-
-// The BlogsService class contains methods to create, read, update, and delete blogs. It also contains methods to add comments, likes, and ratings to a blog. The service class uses the TypeORM repository to interact with the database.
