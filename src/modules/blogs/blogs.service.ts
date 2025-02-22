@@ -68,7 +68,7 @@ export class BlogsService {
     };
   }
 
-  async findOne(id: string, userId: string): Promise<APIResponse<any>> {
+  async findOne(id: string): Promise<APIResponse<Blog>> {
     const blog = await this.blogsRepository.findOne({
       where: { id },
       relations: ['comments', 'likes', 'ratings'],
@@ -99,25 +99,12 @@ export class BlogsService {
     };
 
     const nestedComments = organizeComments(comments);
-
     blog.comments = nestedComments;
-
-    const userLike = blog.likes.find((like) => like.userId === userId);
-    const hasLiked = !!userLike;
-
-    const userRating = blog.ratings.find((rating) => rating.userId === userId);
-    const userRatingValue = userRating ? userRating.rating : null;
 
     return {
       status: HttpStatus.OK,
       message: 'Blog retrieved successfully',
-      data: {
-        ...blog,
-        like: hasLiked,
-        rating: userRatingValue,
-        likes: blog.likes,
-        ratings: blog.ratings,
-      },
+      data: blog,
     };
   }
 

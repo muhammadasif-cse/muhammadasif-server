@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ApiKeyGuard } from 'src/auth/guards/app-auth.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { APIResponse } from 'src/common/interfaces/api-response.interface';
 import { BlogsService } from './blogs.service';
@@ -28,11 +29,11 @@ import { Rating } from './entity/rating.entity';
 
 @ApiTags('blogs')
 @Controller('blogs')
-@UseGuards(ApiKeyGuard)
 export class BlogsController {
   constructor(private readonly blogsService: BlogsService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard, ApiKeyGuard)
   async create(
     @Body() createBlogDto: CreateBlogDto,
   ): Promise<APIResponse<Blog>> {
@@ -40,6 +41,7 @@ export class BlogsController {
   }
 
   @Get()
+  @UseGuards(ApiKeyGuard)
   @ApiQuery({ name: 'page', required: false, example: 1 })
   @ApiQuery({ name: 'limit', required: false, example: 10 })
   @ApiQuery({ name: 'sortBy', required: false, example: 'createdAt' })
@@ -51,14 +53,13 @@ export class BlogsController {
   }
 
   @Get(':id')
-  async findOne(
-    @Param('id') id: string,
-    @Query('userId') userId: string,
-  ): Promise<APIResponse<Blog>> {
-    return this.blogsService.findOne(id, userId);
+  @UseGuards(ApiKeyGuard)
+  async findOne(@Param('id') id: string): Promise<APIResponse<Blog>> {
+    return this.blogsService.findOne(id);
   }
 
   @Put(':id')
+  @UseGuards(JwtAuthGuard, ApiKeyGuard)
   async update(
     @Param('id') id: string,
     @Body() updateBlogDto: UpdateBlogDto,
@@ -67,12 +68,14 @@ export class BlogsController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard, ApiKeyGuard)
   async remove(@Param('id') id: string): Promise<APIResponse<Blog>> {
     return this.blogsService.remove(id);
   }
 
   // Endpoint to add a comment to a blog
   @Post(':id/comments')
+  @UseGuards(JwtAuthGuard, ApiKeyGuard)
   async addComment(
     @Param('id') blogId: string,
     @Body() createCommentDto: CreateCommentDto,
@@ -82,6 +85,7 @@ export class BlogsController {
 
   // Endpoint to get all comments for a blog
   @Get(':id/comments')
+  @UseGuards(ApiKeyGuard)
   async getComments(
     @Param('id') blogId: string,
   ): Promise<APIResponse<Comment[]>> {
@@ -90,6 +94,7 @@ export class BlogsController {
 
   // Endpoint to reply to a comment
   @Post(':blogId/comments/:parentCommentId/reply')
+  @UseGuards(JwtAuthGuard, ApiKeyGuard)
   async replyToComment(
     @Param('blogId') blogId: string,
     @Param('parentCommentId') parentCommentId: string,
@@ -104,6 +109,7 @@ export class BlogsController {
 
   // Update a comment (or reply)
   @Put(':blogId/comments/:id')
+  @UseGuards(JwtAuthGuard, ApiKeyGuard)
   async updateComment(
     @Param('blogId') blogId: string,
     @Param('id') id: string,
@@ -114,6 +120,7 @@ export class BlogsController {
 
   // Endpoint to delete a comment
   @Delete(':blogId/comments/:id')
+  @UseGuards(JwtAuthGuard, ApiKeyGuard)
   async deleteComment(
     @Param('blogId') blogId: string,
     @Param('id') id: string,
@@ -122,11 +129,13 @@ export class BlogsController {
   }
 
   @Get(':id/likes')
+  @UseGuards(ApiKeyGuard)
   async getLikes(@Param('id') blogId: string): Promise<APIResponse<Like[]>> {
     return this.blogsService.getLikes(blogId);
   }
   // Endpoint to add a like to a blog
   @Post(':id/likes')
+  @UseGuards(JwtAuthGuard, ApiKeyGuard)
   async addLike(
     @Param('id') blogId: string,
     @Body() createLikeDto: CreateLikeDto,
@@ -136,6 +145,7 @@ export class BlogsController {
 
   // Remove a like (unlike)
   @Delete(':blogId/likes/:id')
+  @UseGuards(JwtAuthGuard, ApiKeyGuard)
   async removeLike(
     @Param('blogId') blogId: string,
     @Param('id') id: string,
@@ -144,6 +154,7 @@ export class BlogsController {
   }
 
   @Get(':id/ratings')
+  @UseGuards(ApiKeyGuard)
   async getRatings(
     @Param('id') blogId: string,
   ): Promise<APIResponse<Rating[]>> {
@@ -152,6 +163,7 @@ export class BlogsController {
 
   // Endpoint to add a rating to a blog
   @Post(':id/ratings')
+  @UseGuards(JwtAuthGuard, ApiKeyGuard)
   async addRating(
     @Param('id') blogId: string,
     @Body() createRatingDto: CreateRatingDto,
@@ -161,6 +173,7 @@ export class BlogsController {
 
   // Update a rating
   @Put(':blogId/ratings/:id')
+  @UseGuards(JwtAuthGuard, ApiKeyGuard)
   async updateRating(
     @Param('blogId') blogId: string,
     @Param('id') id: string,
