@@ -68,8 +68,7 @@ export class BlogsService {
     };
   }
 
-  // Get a single blog by ID including its comments, likes, and ratings
-  async findOne(id: string): Promise<APIResponse<Blog>> {
+  async findOne(id: string, userId: string): Promise<APIResponse<any>> {
     const blog = await this.blogsRepository.findOne({
       where: { id },
       relations: ['comments', 'likes', 'ratings'],
@@ -82,10 +81,43 @@ export class BlogsService {
       };
     }
 
+    const comments = await this.commentsRepository.find({
+      where: { blogId: id },
+      relations: ['replies'],
+    });
+
+    const organizeComments = (
+      comments: Comment[],
+      parentCommentId: string | null = null,
+    ): Comment[] => {
+      return comments
+        .filter((comment) => comment.parentCommentId === parentCommentId)
+        .map((comment) => {
+          comment.replies = organizeComments(comments, comment.id);
+          return comment;
+        });
+    };
+
+    const nestedComments = organizeComments(comments);
+
+    blog.comments = nestedComments;
+
+    const userLike = blog.likes.find((like) => like.userId === userId);
+    const hasLiked = !!userLike;
+
+    const userRating = blog.ratings.find((rating) => rating.userId === userId);
+    const userRatingValue = userRating ? userRating.rating : null;
+
     return {
       status: HttpStatus.OK,
       message: 'Blog retrieved successfully',
-      data: blog,
+      data: {
+        ...blog,
+        like: hasLiked,
+        rating: userRatingValue,
+        likes: blog.likes,
+        ratings: blog.ratings,
+      },
     };
   }
 

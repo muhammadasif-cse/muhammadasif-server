@@ -51,8 +51,11 @@ export class BlogsController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<APIResponse<Blog>> {
-    return this.blogsService.findOne(id);
+  async findOne(
+    @Param('id') id: string,
+    @Query('userId') userId: string,
+  ): Promise<APIResponse<Blog>> {
+    return this.blogsService.findOne(id, userId);
   }
 
   @Put(':id')
