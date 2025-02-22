@@ -277,6 +277,17 @@ export class BlogsService {
       };
     }
 
+    const existingLike = await this.likesRepository.findOne({
+      where: { blogId },
+    });
+
+    if (existingLike) {
+      return {
+        status: HttpStatus.CONFLICT,
+        message: 'You have already liked this blog',
+      };
+    }
+
     createLikeDto.blogId = blogId;
     const like = this.likesRepository.create(createLikeDto);
     const savedLike = await this.likesRepository.save(like);
@@ -284,6 +295,19 @@ export class BlogsService {
       status: HttpStatus.CREATED,
       message: 'Like added successfully',
       data: savedLike,
+    };
+  }
+
+  // Get all likes for a blog
+  async getLikes(blogId: string): Promise<APIResponse<Like[]>> {
+    const likes = await this.likesRepository.find({
+      where: { blogId },
+    });
+
+    return {
+      status: HttpStatus.OK,
+      message: 'Likes retrieved successfully',
+      data: likes,
     };
   }
 
@@ -328,7 +352,18 @@ export class BlogsService {
       data: savedRating,
     };
   }
+  // Get all ratings for a blog
+  async getRatings(blogId: string): Promise<APIResponse<Rating[]>> {
+    const ratings = await this.ratingsRepository.find({
+      where: { blogId },
+    });
 
+    return {
+      status: HttpStatus.OK,
+      message: 'Ratings retrieved successfully',
+      data: ratings,
+    };
+  }
   // Update a rating
   async updateRating(
     id: string,

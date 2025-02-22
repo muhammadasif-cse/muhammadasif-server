@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, Max, Min } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateRatingDto {
   @IsNotEmpty()
@@ -10,8 +10,7 @@ export class CreateRatingDto {
   userId: string;
 
   @IsNotEmpty()
-  @IsString()
-  @Min(1)
-  @Max(5)
+  @IsNumber()
+  @IsEnum([1, 2, 3, 4, 5])
   rating: number;
 }

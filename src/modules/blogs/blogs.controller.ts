@@ -118,6 +118,10 @@ export class BlogsController {
     return this.blogsService.deleteComment(blogId, id);
   }
 
+  @Get(':id/likes')
+  async getLikes(@Param('id') blogId: string): Promise<APIResponse<Like[]>> {
+    return this.blogsService.getLikes(blogId);
+  }
   // Endpoint to add a like to a blog
   @Post(':id/likes')
   async addLike(
@@ -134,6 +138,13 @@ export class BlogsController {
     @Param('id') id: string,
   ): Promise<APIResponse<Like>> {
     return this.blogsService.removeLike(blogId, id);
+  }
+
+  @Get(':id/ratings')
+  async getRatings(
+    @Param('id') blogId: string,
+  ): Promise<APIResponse<Rating[]>> {
+    return this.blogsService.getRatings(blogId);
   }
 
   // Endpoint to add a rating to a blog
