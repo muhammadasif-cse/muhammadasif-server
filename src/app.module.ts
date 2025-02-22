@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import configuration from './config/configuration';
+import { BlogsModule } from './modules/blogs/blogs.module';
 import { ProjectsModule } from './modules/projects/projects.module';
 import { SkillsModule } from './modules/skills/skills.module';
 import { SocialsModule } from './modules/socials/socials.module';
@@ -44,6 +45,7 @@ import { UsersModule } from './modules/users/users.module';
     ProjectsModule,
     SocialsModule,
     SkillsModule,
+    BlogsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
