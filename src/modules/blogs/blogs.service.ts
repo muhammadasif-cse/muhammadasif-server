@@ -177,6 +177,35 @@ export class BlogsService {
     };
   }
 
+  // Get comments for a blog
+  async getComments(blogId: string): Promise<APIResponse<Comment[]>> {
+    const comments = await this.commentsRepository.find({ where: { blogId } });
+    return {
+      status: HttpStatus.OK,
+      data: comments,
+      message: 'Comments retrieved successfully',
+    };
+  }
+
+  // Delete a comment
+  async deleteComment(
+    blogId: string,
+    id: string,
+  ): Promise<APIResponse<Comment>> {
+    const comment = await this.commentsRepository.findOne({
+      where: { blogId, id },
+    });
+    if (!comment) {
+      throw new Error('Comment not found');
+    }
+    await this.commentsRepository.remove(comment);
+    return {
+      status: HttpStatus.OK,
+      data: comment,
+      message: 'Comment deleted successfully',
+    };
+  }
+
   // Add a like to a blog
   async addLike(
     blogId: string,

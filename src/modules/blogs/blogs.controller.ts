@@ -76,6 +76,15 @@ export class BlogsController {
   ): Promise<APIResponse<Comment>> {
     return this.blogsService.addComment(blogId, createCommentDto);
   }
+
+  // Endpoint to get all comments for a blog
+  @Get(':id/comments')
+  async getComments(
+    @Param('id') blogId: string,
+  ): Promise<APIResponse<Comment[]>> {
+    return this.blogsService.getComments(blogId);
+  }
+
   // Update a comment (or reply)
   @Put(':blogId/comments/:id')
   async updateComment(
@@ -84,6 +93,15 @@ export class BlogsController {
     @Body() updateCommentDto: UpdateCommentDto,
   ): Promise<APIResponse<Comment>> {
     return this.blogsService.updateComment(blogId, id, updateCommentDto);
+  }
+
+  // Endpoint to delete a comment
+  @Delete(':blogId/comments/:id')
+  async deleteComment(
+    @Param('blogId') blogId: string,
+    @Param('id') id: string,
+  ): Promise<APIResponse<Comment>> {
+    return this.blogsService.deleteComment(blogId, id);
   }
 
   // Endpoint to add a like to a blog
@@ -112,6 +130,7 @@ export class BlogsController {
   ): Promise<APIResponse<Rating>> {
     return this.blogsService.addRating(blogId, createRatingDto);
   }
+
   // Update a rating
   @Put(':blogId/ratings/:id')
   async updateRating(
