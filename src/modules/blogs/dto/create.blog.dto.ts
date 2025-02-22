@@ -1,10 +1,4 @@
-import {
-  IsEnum,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export enum BlogStatus {
   DRAFT = 'draft',
@@ -22,8 +16,8 @@ export class CreateBlogDto {
   content: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  author_id: number;
+  @IsString()
+  authorId: string;
 
   @IsOptional()
   @IsEnum(BlogStatus)

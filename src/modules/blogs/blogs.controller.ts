@@ -19,6 +19,8 @@ import { CreateCommentDto } from './dto/create.comment.dto';
 import { CreateLikeDto } from './dto/create.like.dto';
 import { CreateRatingDto } from './dto/create.rating.dto';
 import { UpdateBlogDto } from './dto/update.blog.dto';
+import { UpdateCommentDto } from './dto/update.comment.dto';
+import { UpdateRatingDto } from './dto/update.rating.dto';
 import { Blog } from './entity/blog.entity';
 import { Comment } from './entity/comment.entity';
 import { Like } from './entity/like.entity';
@@ -74,6 +76,15 @@ export class BlogsController {
   ): Promise<APIResponse<Comment>> {
     return this.blogsService.addComment(blogId, createCommentDto);
   }
+  // Update a comment (or reply)
+  @Put(':blogId/comments/:id')
+  async updateComment(
+    @Param('blogId') blogId: string,
+    @Param('id') id: string,
+    @Body() updateCommentDto: UpdateCommentDto,
+  ): Promise<APIResponse<Comment>> {
+    return this.blogsService.updateComment(blogId, id, updateCommentDto);
+  }
 
   // Endpoint to add a like to a blog
   @Post(':id/likes')
@@ -84,6 +95,15 @@ export class BlogsController {
     return this.blogsService.addLike(blogId, createLikeDto);
   }
 
+  // Remove a like (unlike)
+  @Delete(':blogId/likes/:id')
+  async removeLike(
+    @Param('blogId') blogId: string,
+    @Param('id') id: string,
+  ): Promise<APIResponse<Like>> {
+    return this.blogsService.removeLike(blogId, id);
+  }
+
   // Endpoint to add a rating to a blog
   @Post(':id/ratings')
   async addRating(
@@ -91,5 +111,14 @@ export class BlogsController {
     @Body() createRatingDto: CreateRatingDto,
   ): Promise<APIResponse<Rating>> {
     return this.blogsService.addRating(blogId, createRatingDto);
+  }
+  // Update a rating
+  @Put(':blogId/ratings/:id')
+  async updateRating(
+    @Param('blogId') blogId: string,
+    @Param('id') id: string,
+    @Body() updateRatingDto: UpdateRatingDto,
+  ): Promise<APIResponse<Rating>> {
+    return this.blogsService.updateRating(blogId, id, updateRatingDto);
   }
 }

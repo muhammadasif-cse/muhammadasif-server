@@ -1,4 +1,4 @@
-import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { BlogStatus } from './create.blog.dto';
 
 export class UpdateBlogDto {
@@ -11,8 +11,8 @@ export class UpdateBlogDto {
   content?: string;
 
   @IsOptional()
-  @IsNumber()
-  author_id?: number;
+  @IsString()
+  authorId?: string;
 
   @IsOptional()
   @IsEnum(BlogStatus)
