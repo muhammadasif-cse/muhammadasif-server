@@ -45,7 +45,7 @@ export class ProjectsService {
     const totalPages = Math.ceil(totalItems / limit);
 
     return {
-      status: HttpStatus.CREATED,
+      status: HttpStatus.OK,
       message: 'Projects retrieved successfully',
       data: projects,
       meta: {
